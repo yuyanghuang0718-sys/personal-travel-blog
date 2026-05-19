@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>新增文章 | 宇揚的旅遊札記</title>
+    <meta name="description" content="宇揚的旅遊札記文章新增工具。" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" data-header>
+      <a class="brand" href="index.html" aria-label="宇揚的旅遊札記首頁">
+        <span class="brand-mark">途</span>
+        <span>宇揚的旅遊札記</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="site-nav" id="site-nav" data-nav>
+        <a href="index.html#stories">旅行文章</a>
+        <a href="index.html#destinations">目的地</a>
+        <a href="index.html#subscribe">訂閱</a>
+      </nav>
+    </header>
+
+    <main class="admin-page">
+      <section class="admin-header">
+        <p class="eyebrow">Admin</p>
+        <h1>新增旅行文章</h1>
+        <p>
+          填好文章內容後，這裡會產生文章檔案、首頁文章資料，以及圖片放置路徑。GitHub Pages 是靜態網站，所以這一版先用安全的檔案產生流程。
+        </p>
+      </section>
+
+      <section class="admin-layout">
+        <form class="admin-form" data-admin-form>
+          <label>
+            <span>文章標題</span>
+            <input name="title" type="text" placeholder="例如：釜山四天三夜海線旅行" required />
+          </label>
+
+          <div class="form-row">
+            <label>
+              <span>文章分類</span>
+              <select name="category">
+                <option value="city">城市散步</option>
+                <option value="nature">自然風景</option>
+                <option value="food">美食咖啡</option>
+              </select>
+            </label>
+            <label>
+              <span>文章網址代稱</span>
+              <input name="slug" type="text" placeholder="busan-4-days" required />
+            </label>
+          </div>
+
+          <label>
+            <span>摘要</span>
+            <textarea name="excerpt" rows="3" placeholder="寫一小段會出現在首頁卡片上的摘要。" required></textarea>
+          </label>
+
+          <label>
+            <span>關鍵字</span>
+            <input name="keywords" type="text" placeholder="首爾 咖啡 景點 週末" />
+          </label>
+
+          <label>
+            <span>封面圖片</span>
+            <input name="cover" type="file" accept="image/*" />
+          </label>
+
+          <label>
+            <span>文章內容</span>
+            <textarea
+              name="body"
+              rows="14"
+              placeholder="可以直接貼遊記文字。空一行會分成不同段落。若要分段標題，請用 ## Day 1：抵達"
+              required
+            ></textarea>
+          </label>
+
+          <div class="admin-actions">
+            <button class="button primary" type="submit">產生文章</button>
+            <button class="button neutral" type="reset">清空</button>
+          </div>
+        </form>
+
+        <aside class="admin-output" data-admin-output>
+          <h2>產生結果</h2>
+          <p>填好內容後按「產生文章」，這裡會出現下載按鈕與發布清單。</p>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 宇揚的旅遊札記</p>
+      <div>
+        <a href="index.html#stories">文章</a>
+        <a href="index.html#destinations">目的地</a>
+        <a href="index.html#subscribe">訂閱</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
