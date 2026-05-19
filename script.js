@@ -15,12 +15,14 @@ const updateHeader = () => {
 };
 
 const closeNav = () => {
+  if (!nav || !navToggle) return;
   nav.classList.remove("open");
   document.body.classList.remove("nav-open");
   navToggle.setAttribute("aria-expanded", "false");
 };
 
 const updateStories = () => {
+  if (!searchInput || !emptyState) return;
   const query = searchInput.value.trim().toLowerCase();
   let visibleCount = 0;
 
@@ -37,18 +39,22 @@ const updateStories = () => {
   emptyState.hidden = visibleCount > 0;
 };
 
-window.addEventListener("scroll", updateHeader, { passive: true });
-updateHeader();
+if (header) {
+  window.addEventListener("scroll", updateHeader, { passive: true });
+  updateHeader();
+}
 
-navToggle.addEventListener("click", () => {
-  const isOpen = nav.classList.toggle("open");
-  document.body.classList.toggle("nav-open", isOpen);
-  navToggle.setAttribute("aria-expanded", String(isOpen));
-});
+if (navToggle && nav) {
+  navToggle.addEventListener("click", () => {
+    const isOpen = nav.classList.toggle("open");
+    document.body.classList.toggle("nav-open", isOpen);
+    navToggle.setAttribute("aria-expanded", String(isOpen));
+  });
 
-nav.addEventListener("click", (event) => {
-  if (event.target.matches("a")) closeNav();
-});
+  nav.addEventListener("click", (event) => {
+    if (event.target.matches("a")) closeNav();
+  });
+}
 
 filterButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -58,12 +64,16 @@ filterButtons.forEach((button) => {
   });
 });
 
-searchInput.addEventListener("input", updateStories);
+if (searchInput) {
+  searchInput.addEventListener("input", updateStories);
+}
 
-subscribeForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const email = new FormData(subscribeForm).get("email") || subscribeForm.querySelector("input").value;
+if (subscribeForm && formMessage) {
+  subscribeForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const email = new FormData(subscribeForm).get("email") || subscribeForm.querySelector("input").value;
 
-  formMessage.textContent = `${email} 已加入訂閱名單。`;
-  subscribeForm.reset();
-});
+    formMessage.textContent = `${email} 已加入訂閱名單。`;
+    subscribeForm.reset();
+  });
+}
