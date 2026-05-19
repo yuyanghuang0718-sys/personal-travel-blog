@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>途中筆記 | 個人旅遊部落格</title>
+    <meta
+      name="description"
+      content="途中筆記是一個分享城市散步、自然旅行、在地美食與旅程實用資訊的個人旅遊部落格。"
+    />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" data-header>
+      <a class="brand" href="#top" aria-label="途中筆記首頁">
+        <span class="brand-mark">途</span>
+        <span>途中筆記</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="site-nav" id="site-nav" data-nav>
+        <a href="#stories">旅行文章</a>
+        <a href="#destinations">目的地</a>
+        <a href="#journal">旅程日誌</a>
+        <a href="#subscribe">訂閱</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <img
+          class="hero-image"
+          src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=80"
+          alt="海岸旅行風景"
+        />
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <p class="eyebrow">城市、海岸、山線與餐桌</p>
+          <h1>把每一段旅程，寫成下次出發的線索。</h1>
+          <p class="hero-copy">
+            分享我在台灣與世界各地旅行時收藏的路線、住宿、咖啡館、交通細節與真實感受。
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#stories">閱讀最新文章</a>
+            <a class="button secondary" href="#destinations">探索目的地</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="intro-band" aria-label="網站摘要">
+        <div>
+          <strong>42</strong>
+          <span>篇旅遊筆記</span>
+        </div>
+        <div>
+          <strong>16</strong>
+          <span>座城市紀錄</span>
+        </div>
+        <div>
+          <strong>8</strong>
+          <span>條週末路線</span>
+        </div>
+        <div>
+          <strong>100%</strong>
+          <span>親自走訪</span>
+        </div>
+      </section>
+
+      <section class="section stories-section" id="stories">
+        <div class="section-heading">
+          <p class="eyebrow">Latest Stories</p>
+          <h2>最新旅行文章</h2>
+          <p>從短程散步到長途旅行，整理出能直接參考的路線與心得。</p>
+        </div>
+
+        <div class="filter-bar" aria-label="文章篩選">
+          <label class="search-field">
+            <span>搜尋文章</span>
+            <input type="search" placeholder="輸入城市、主題或季節" data-search />
+          </label>
+          <div class="category-tabs" role="tablist" aria-label="文章分類">
+            <button class="tab active" type="button" data-filter="all">全部</button>
+            <button class="tab" type="button" data-filter="city">城市散步</button>
+            <button class="tab" type="button" data-filter="nature">自然風景</button>
+            <button class="tab" type="button" data-filter="food">美食咖啡</button>
+          </div>
+        </div>
+
+        <div class="story-grid" data-story-grid>
+          <article class="story-card featured" data-category="city" data-keywords="京都 城市散步 町家 咖啡 春天">
+            <img
+              src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80"
+              alt="京都街道與傳統建築"
+            />
+            <div class="story-content">
+              <span class="tag">城市散步</span>
+              <h3>京都巷弄三日：避開人潮的清晨散步路線</h3>
+              <p>從鴨川晨跑、町家早餐到黃昏小酒館，排出不趕行程的京都節奏。</p>
+              <a href="#journal">閱讀筆記</a>
+            </div>
+          </article>
+
+          <article class="story-card" data-category="nature" data-keywords="花蓮 海岸 太魯閣 自然 夏天">
+            <img
+              src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80"
+              alt="山谷與河流景色"
+            />
+            <div class="story-content">
+              <span class="tag">自然風景</span>
+              <h3>花蓮山海線：從峽谷到太平洋的兩日旅行</h3>
+              <p>整理租車動線、停留時間與沿途補給點，適合第一次安排東海岸旅行。</p>
+              <a href="#journal">閱讀筆記</a>
+            </div>
+          </article>
+
+          <article class="story-card" data-category="food" data-keywords="首爾 咖啡 甜點 市場 秋天">
+            <img
+              src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=900&q=80"
+              alt="餐桌上的餐點與飲品"
+            />
+            <div class="story-content">
+              <span class="tag">美食咖啡</span>
+              <h3>首爾咖啡館地圖：六間值得繞路的空間</h3>
+              <p>按區域安排咖啡館、選物店與晚餐，讓一天不用在地鐵裡浪費時間。</p>
+              <a href="#journal">閱讀筆記</a>
+            </div>
+          </article>
+
+          <article class="story-card" data-category="city" data-keywords="台南 老屋 巷弄 小吃 週末">
+            <img
+              src="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=900&q=80"
+              alt="海邊城鎮建築與街景"
+            />
+            <div class="story-content">
+              <span class="tag">城市散步</span>
+              <h3>台南週末散步：老屋、甜湯與午後巷口</h3>
+              <p>不塞滿景點，只保留舒服步行距離與幾間真心想再訪的小店。</p>
+              <a href="#journal">閱讀筆記</a>
+            </div>
+          </article>
+        </div>
+        <p class="empty-state" data-empty hidden>目前沒有符合條件的文章。</p>
+      </section>
+
+      <section class="section destinations" id="destinations">
+        <div class="section-heading">
+          <p class="eyebrow">Destinations</p>
+          <h2>目的地靈感</h2>
+          <p>依旅行心情挑選下一站：安靜、熱鬧、靠海，或只是想吃得好。</p>
+        </div>
+        <div class="destination-grid">
+          <a class="destination-card" href="#stories">
+            <img
+              src="https://images.unsplash.com/photo-1528164344705-47542687000d?auto=format&fit=crop&w=900&q=80"
+              alt="日本城市街景"
+            />
+            <span>日本</span>
+          </a>
+          <a class="destination-card" href="#stories">
+            <img
+              src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=900&q=80"
+              alt="東京城市夜景"
+            />
+            <span>城市週末</span>
+          </a>
+          <a class="destination-card" href="#stories">
+            <img
+              src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80"
+              alt="公路與自然景觀"
+            />
+            <span>公路旅行</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="journal" id="journal">
+        <div class="journal-copy">
+          <p class="eyebrow">Travel Journal</p>
+          <h2>我怎麼記錄一趟旅行</h2>
+          <p>
+            每篇文章都會保留實際花費、交通時間、路線取捨與踩點後的主觀感受。比起打卡清單，我更在意這趟旅程是否適合某一種心情與步調。
+          </p>
+        </div>
+        <ol class="timeline">
+          <li>
+            <span>01</span>
+            <div>
+              <h3>出發前</h3>
+              <p>先抓住宿區域、交通瓶頸與每天最多兩個核心目標。</p>
+            </div>
+          </li>
+          <li>
+            <span>02</span>
+            <div>
+              <h3>旅途中</h3>
+              <p>記錄實際移動時間、排隊狀況、替代方案與臨時發現。</p>
+            </div>
+          </li>
+          <li>
+            <span>03</span>
+            <div>
+              <h3>回來後</h3>
+              <p>把照片、地圖與心得整理成可複製也可調整的旅行筆記。</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="subscribe" id="subscribe">
+        <div>
+          <p class="eyebrow">Newsletter</p>
+          <h2>收到下一篇旅遊筆記</h2>
+          <p>每月整理一封信：新文章、私房清單、旅行預算與正在規劃的下一站。</p>
+        </div>
+        <form class="subscribe-form" data-form>
+          <label>
+            <span>Email</span>
+            <input type="email" placeholder="you@example.com" required />
+          </label>
+          <button class="button primary" type="submit">訂閱</button>
+          <p class="form-message" data-form-message role="status"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 途中筆記</p>
+      <div>
+        <a href="#stories">文章</a>
+        <a href="#destinations">目的地</a>
+        <a href="#subscribe">訂閱</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
