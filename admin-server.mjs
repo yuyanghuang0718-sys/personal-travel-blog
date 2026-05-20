@@ -95,7 +95,6 @@ const buildArticleHtml = ({ title, excerpt, category, body, coverPath }) => `<!d
       </button>
       <nav class="site-nav" id="site-nav" data-nav>
         <a href="../index.html#stories">旅行文章</a>
-        <a href="../index.html#destinations">目的地</a>
         <a href="../index.html#journal">旅程日誌</a>
         <a href="../index.html#subscribe">訂閱</a>
       </nav>
@@ -125,7 +124,6 @@ const buildArticleHtml = ({ title, excerpt, category, body, coverPath }) => `<!d
       <p>© 2026 宇揚的旅遊札記</p>
       <div>
         <a href="../index.html#stories">文章</a>
-        <a href="../index.html#destinations">目的地</a>
         <a href="../index.html#subscribe">訂閱</a>
       </div>
     </footer>
