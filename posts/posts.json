@@ -1,5 +1,16 @@
 [
   {
+    "title": "首爾7天6夜之旅",
+    "excerpt": "臨時起意的首爾獨旅~",
+    "category": "city",
+    "tag": "城市散步",
+    "keywords": "首爾",
+    "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+    "imageAlt": "首爾7天6夜之旅",
+    "url": "articles/seoul-7-days.html",
+    "featured": false
+  },
+  {
     "title": "京都巷弄三日：避開人潮的清晨散步路線",
     "excerpt": "從鴨川晨跑、町家早餐到黃昏小酒館，排出不趕行程的京都節奏。",
     "category": "city",
@@ -19,17 +30,6 @@
     "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
     "imageAlt": "山谷與河流景色",
     "url": "#journal",
-    "featured": false
-  },
-  {
-    "title": "首爾七天六夜：從宮殿、漢江到咖啡街的慢旅行",
-    "excerpt": "把弘大、景福宮、聖水洞、益善洞、南山與漢江排進一趟剛剛好的首爾旅行。",
-    "category": "city",
-    "tag": "城市散步",
-    "keywords": "首爾 七天六夜 弘大 明洞 景福宮 聖水 益善洞 漢江 南山 旅行 遊記",
-    "image": "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=900&q=80",
-    "imageAlt": "首爾城市夜景",
-    "url": "articles/seoul-7-days.html",
     "featured": false
   },
   {
