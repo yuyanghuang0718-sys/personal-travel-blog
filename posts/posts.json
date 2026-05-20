@@ -1,23 +1,23 @@
 [
   {
-    "title": "首爾七天六夜之旅part1",
-    "excerpt": "出發韓國!GOGOGO!",
+    "title": "首爾7天6夜之旅part1",
+    "excerpt": "韓國GOGOGO!",
     "category": "city",
-    "tag": "國外遊記",
-    "keywords": "首爾七天六夜之旅part1 出發韓國!GOGOGO! 國外遊記",
+    "tag": "城市路線",
+    "keywords": "首爾7天6夜之旅part1 韓國GOGOGO! 城市路線",
     "image": "assets/uploads/part1.jpg",
-    "imageAlt": "首爾七天六夜之旅part1",
+    "imageAlt": "首爾7天6夜之旅part1",
     "url": "articles/part1.html",
     "featured": false
   },
   {
-    "title": "首爾7天6夜之旅",
-    "excerpt": "臨時起意的首爾獨旅~",
+    "title": "首爾 7 天旅行筆記",
+    "excerpt": "從航班、入境、交通到城市散步，把七天首爾行程整理成可重看的旅行紀錄。",
     "category": "city",
-    "tag": "國外遊記",
-    "keywords": "首爾",
+    "tag": "城市路線",
+    "keywords": "首爾 7 天旅行筆記 航班 入境 交通 城市路線",
     "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
-    "imageAlt": "首爾7天6夜之旅",
+    "imageAlt": "首爾 7 天旅行筆記",
     "url": "articles/seoul-7-days.html",
     "featured": true
   }
