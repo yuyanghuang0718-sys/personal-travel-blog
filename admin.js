@@ -1,5 +1,6 @@
 const adminForm = document.querySelector("[data-admin-form]");
 const adminOutput = document.querySelector("[data-admin-output]");
+const adminMode = document.querySelector("[data-admin-mode]");
 
 const tagLabels = {
   city: "城市散步",
@@ -14,6 +15,15 @@ const slugify = (value) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 72);
+
+const fallbackSlug = () => {
+  const now = new Date();
+  const date = now.toISOString().slice(0, 10).replaceAll("-", "");
+  const time = `${now.getHours()}`.padStart(2, "0") + `${now.getMinutes()}`.padStart(2, "0");
+  return `post-${date}-${time}`;
+};
+
+const getSafeSlug = (value) => slugify(value) || fallbackSlug();
 
 const escapeHtmlAdmin = (value = "") =>
   value.replace(/[&<>"']/g, (character) => {
@@ -116,6 +126,7 @@ const buildArticleHtml = ({ title, excerpt, category, body, coverPath }) => `<!d
 const renderResult = ({ articleHtml, postEntry, articleFilename, imageFilename, imageFile }) => {
   adminOutput.innerHTML = `
     <h2>產生完成</h2>
+    <p>這是檔案下載模式，還沒有發布到網站。要一鍵發布，請用本機後台網址開啟。</p>
     <div class="publish-list">
       <div>
         <span>文章檔案</span>
@@ -193,6 +204,20 @@ const publishWithLocalServer = async (payload) => {
   return result;
 };
 
+const updateAdminMode = async () => {
+  if (!adminMode) return;
+
+  try {
+    const response = await fetch("/api/health");
+    if (!response.ok) throw new Error("not local");
+    adminMode.textContent = "目前是本機發布模式：按下產生文章後會直接寫入網站並推送到 GitHub Pages。";
+    adminMode.classList.add("ready");
+  } catch {
+    adminMode.textContent = "目前是檔案下載模式：可以產生文章檔，但不會直接發布。要一鍵發布，請用 node admin-server.mjs 開啟本機後台。";
+    adminMode.classList.remove("ready");
+  }
+};
+
 if (adminForm) {
   adminForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -201,7 +226,7 @@ if (adminForm) {
     const excerpt = formData.get("excerpt").trim();
     const category = formData.get("category");
     const body = formData.get("body").trim();
-    const slug = slugify(formData.get("slug") || title);
+    const slug = getSafeSlug(formData.get("slug") || title);
     const keywords = formData.get("keywords").trim();
     const imageFile = formData.get("cover");
     const imageExtension = imageFile?.name?.split(".").pop()?.toLowerCase() || "jpg";
@@ -258,3 +283,5 @@ if (adminForm) {
     }
   });
 }
+
+updateAdminMode();

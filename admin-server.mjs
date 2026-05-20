@@ -44,6 +44,15 @@ const slugify = (value) =>
     .replace(/^-+|-+$/g, "")
     .slice(0, 72);
 
+const fallbackSlug = () => {
+  const now = new Date();
+  const date = now.toISOString().slice(0, 10).replaceAll("-", "");
+  const time = `${now.getHours()}`.padStart(2, "0") + `${now.getMinutes()}`.padStart(2, "0");
+  return `post-${date}-${time}`;
+};
+
+const getSafeSlug = (value) => slugify(value) || fallbackSlug();
+
 const readRequestBody = async (request) => {
   const chunks = [];
   for await (const chunk of request) chunks.push(chunk);
@@ -137,7 +146,7 @@ const publishPost = async (payload) => {
   const category = String(payload.category || "city");
   const keywords = String(payload.keywords || "").trim();
   const body = String(payload.body || "").trim();
-  const slug = slugify(String(payload.slug || title));
+  const slug = getSafeSlug(String(payload.slug || title));
 
   if (!title || !excerpt || !body || !slug) {
     throw new Error("文章標題、摘要、網址代稱與內容都必填。");
