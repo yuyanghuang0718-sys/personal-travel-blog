@@ -6,7 +6,7 @@ import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
 const root = process.cwd();
-const port = Number(process.env.PORT || 4173);
+const port = Number(process.env.PORT || 4174);
 const types = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -21,13 +21,13 @@ const types = {
 };
 
 const tagLabels = {
-  city: "城市散步",
+  city: "城市路線",
   nature: "自然風景",
-  food: "美食咖啡",
+  food: "美食餐桌",
 };
 
 const escapeHtml = (value = "") =>
-  value.replace(/[&<>"']/g, (character) => {
+  String(value).replace(/[&<>"']/g, (character) => {
     const entities = {
       "&": "&amp;",
       "<": "&lt;",
@@ -39,7 +39,7 @@ const escapeHtml = (value = "") =>
   });
 
 const slugify = (value) =>
-  value
+  String(value)
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
@@ -101,20 +101,11 @@ const extractDataUrlImages = async (html, slug) => {
   return nextHtml;
 };
 
-const buildArticleHtml = ({ title, excerpt, category, bodyHtml, coverPath }) => `<!doctype html>
-<html lang="zh-Hant">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${escapeHtml(title)} | 宇揚的旅遊札記</title>
-    <meta name="description" content="${escapeHtml(excerpt)}" />
-    <link rel="stylesheet" href="../styles.css" />
-  </head>
-  <body>
+const articleHeader = () => `
     <header class="site-header" data-header>
-      <a class="brand" href="../index.html" aria-label="宇揚的旅遊札記首頁">
-        <span class="brand-mark">途</span>
-        <span>宇揚的旅遊札記</span>
+      <a class="brand" href="../index.html" aria-label="宇揚的旅行筆記首頁">
+        <span class="brand-mark">旅</span>
+        <span>宇揚的旅行筆記</span>
       </a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
         <span></span>
@@ -122,11 +113,30 @@ const buildArticleHtml = ({ title, excerpt, category, bodyHtml, coverPath }) => 
         <span></span>
       </button>
       <nav class="site-nav" id="site-nav" data-nav>
-        <a href="../index.html#stories">旅行文章</a>
-        <a href="../index.html#journal">旅程日誌</a>
+        <a href="../index.html#stories">文章</a>
         <a href="../index.html#subscribe">訂閱</a>
       </nav>
-    </header>
+    </header>`;
+
+const articleFooter = () => `
+    <footer class="site-footer">
+      <p>© 2026 宇揚的旅行筆記</p>
+      <div>
+        <a href="../index.html#stories">文章</a>
+        <a href="../index.html#subscribe">訂閱</a>
+      </div>
+    </footer>`;
+
+const buildArticleHtml = ({ title, excerpt, category, bodyHtml, coverPath }) => `<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${escapeHtml(title)} | 宇揚的旅行筆記</title>
+    <meta name="description" content="${escapeHtml(excerpt)}" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>${articleHeader()}
 
     <main>
       <article class="article-page">
@@ -147,14 +157,7 @@ const buildArticleHtml = ({ title, excerpt, category, bodyHtml, coverPath }) => 
         </div>
       </article>
     </main>
-
-    <footer class="site-footer">
-      <p>© 2026 宇揚的旅遊札記</p>
-      <div>
-        <a href="../index.html#stories">文章</a>
-        <a href="../index.html#subscribe">訂閱</a>
-      </div>
-    </footer>
+${articleFooter()}
 
     <script src="../script.js"></script>
   </body>
@@ -166,27 +169,11 @@ const buildPdfArticleHtml = ({ title, excerpt, category, coverPath, pdfPath }) =
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${escapeHtml(title)} | 宇揚的旅遊札記</title>
+    <title>${escapeHtml(title)} | 宇揚的旅行筆記</title>
     <meta name="description" content="${escapeHtml(excerpt)}" />
     <link rel="stylesheet" href="../styles.css" />
   </head>
-  <body>
-    <header class="site-header" data-header>
-      <a class="brand" href="../index.html" aria-label="宇揚的旅遊札記首頁">
-        <span class="brand-mark">途</span>
-        <span>宇揚的旅遊札記</span>
-      </a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <nav class="site-nav" id="site-nav" data-nav>
-        <a href="../index.html#stories">旅行文章</a>
-        <a href="../index.html#journal">旅程日誌</a>
-        <a href="../index.html#subscribe">訂閱</a>
-      </nav>
-    </header>
+  <body>${articleHeader()}
 
     <main>
       <article class="article-page pdf-post-page">
@@ -203,7 +190,7 @@ const buildPdfArticleHtml = ({ title, excerpt, category, coverPath, pdfPath }) =
         <div class="article-layout single-column">
           <div class="article-body">
             <div class="pdf-rendered-article" data-pdf-renderer data-pdf-url="${escapeHtml(pdfPath)}" data-title="${escapeHtml(title)}" data-excerpt="${escapeHtml(excerpt)}">
-              <p class="pdf-loading">正在載入文章內容...</p>
+              <p class="pdf-loading">正在載入 PDF 文章...</p>
               <iframe
                 class="pdf-article-frame"
                 src="${escapeHtml(pdfPath)}#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
@@ -215,14 +202,7 @@ const buildPdfArticleHtml = ({ title, excerpt, category, coverPath, pdfPath }) =
         </div>
       </article>
     </main>
-
-    <footer class="site-footer">
-      <p>© 2026 宇揚的旅遊札記</p>
-      <div>
-        <a href="../index.html#stories">文章</a>
-        <a href="../index.html#subscribe">訂閱</a>
-      </div>
-    </footer>
+${articleFooter()}
 
     <script src="../script.js"></script>
     <script type="module" src="../pdf-blog-renderer.js"></script>
@@ -244,27 +224,36 @@ const writePosts = async (posts) => {
 };
 
 const commitAndPush = async (files, message) => {
-  await execFileAsync("git", ["add", ...files]);
+  try {
+    await execFileAsync("git", ["add", ...files]);
+  } catch (error) {
+    return { ok: false, message: `Git 暫存失敗：${error.message}` };
+  }
+
   try {
     await execFileAsync("git", ["diff", "--cached", "--quiet"]);
-    return false;
+    return { ok: true, pushed: false, message: "沒有新的 Git 變更需要同步。" };
   } catch {
-    await execFileAsync("git", ["commit", "-m", message]);
-    await execFileAsync("git", ["push"]);
-    return true;
+    try {
+      await execFileAsync("git", ["commit", "-m", message]);
+      await execFileAsync("git", ["push"]);
+      return { ok: true, pushed: true, message: "Git 已提交並推送。" };
+    } catch (error) {
+      return { ok: false, message: `文章已寫入本機，但 Git 同步失敗：${error.message}` };
+    }
   }
 };
 
 const getSafeArticlePath = (url) => {
   const normalized = String(url || "").replaceAll("\\", "/");
   if (!normalized.startsWith("articles/") || !normalized.endsWith(".html") || normalized.includes("..")) {
-    throw new Error("文章路徑不正確。");
+    throw new Error("文章路徑不安全。");
   }
 
   const articlePath = path.resolve(root, normalized);
   const articlesRoot = path.resolve(root, "articles");
   if (!articlePath.startsWith(articlesRoot + path.sep)) {
-    throw new Error("文章路徑不正確。");
+    throw new Error("文章路徑不安全。");
   }
 
   return articlePath;
@@ -276,10 +265,9 @@ const updateArticleShell = async ({ url, title, excerpt, category }) => {
   const tag = tagLabels[category] || tagLabels.city;
 
   html = html
-    .replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(title)} | 宇揚的旅遊札記</title>`)
+    .replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(title)} | 宇揚的旅行筆記</title>`)
     .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${escapeHtml(excerpt)}" />`)
     .replace(/<p class="eyebrow">[\s\S]*?<\/p>/, `<p class="eyebrow">${escapeHtml(tag)}</p>`)
-    .replace(/<h1>[\s\S]*?<\/h1>/, `<h1>${escapeHtml(title)}</h1>`)
     .replace(/<h1>[\s\S]*?<\/h1>\s*<p>[\s\S]*?<\/p>/, `<h1>${escapeHtml(title)}</h1>\n            <p>${escapeHtml(excerpt)}</p>`)
     .replace(/(<img src="[^"]*" alt=")[^"]*(" \/>)/, `$1${escapeHtml(title)}$2`)
     .replace(/data-title="[^"]*"/, `data-title="${escapeHtml(title)}"`)
@@ -296,12 +284,12 @@ const updatePost = async (payload) => {
   const category = String(payload.category || "city");
 
   if (!originalUrl || !title || !excerpt) {
-    throw new Error("請選擇文章並填好標題與摘要。");
+    throw new Error("請填寫文章標題、摘要與原始文章網址。");
   }
 
   const posts = await readPosts();
   const index = posts.findIndex((post) => post.url === originalUrl);
-  if (index < 0) throw new Error("找不到這篇文章。");
+  if (index < 0) throw new Error("找不到要更新的文章。");
 
   const tag = tagLabels[category] || tagLabels.city;
   posts[index] = {
@@ -317,20 +305,20 @@ const updatePost = async (payload) => {
   await updateArticleShell({ url: originalUrl, title, excerpt, category });
   await writePosts(posts);
 
-  await commitAndPush(["articles", "posts/posts.json"], `Update ${title}`);
+  const sync = await commitAndPush(["articles", "posts/posts.json"], `Update ${title}`);
 
-  return { postEntry: posts[index] };
+  return { postEntry: posts[index], sync };
 };
 
 const deletePost = async (payload) => {
   const url = String(payload.url || "").trim();
-  if (!url) throw new Error("請選擇要刪除的文章。");
+  if (!url) throw new Error("請提供要刪除的文章。");
 
   const articlePath = getSafeArticlePath(url);
   const posts = await readPosts();
   const post = posts.find((item) => item.url === url);
   const nextPosts = posts.filter((item) => item.url !== url);
-  if (nextPosts.length === posts.length) throw new Error("找不到這篇文章。");
+  if (nextPosts.length === posts.length) throw new Error("找不到要刪除的文章。");
 
   await writePosts(nextPosts);
   try {
@@ -339,9 +327,9 @@ const deletePost = async (payload) => {
     if (error.code !== "ENOENT") throw error;
   }
 
-  await commitAndPush(["articles", "posts/posts.json"], `Delete ${post?.title || url}`);
+  const sync = await commitAndPush(["articles", "posts/posts.json"], `Delete ${post?.title || url}`);
 
-  return { deletedUrl: url };
+  return { deletedUrl: url, sync };
 };
 
 const publishPost = async (payload) => {
@@ -355,7 +343,7 @@ const publishPost = async (payload) => {
   const bodyHtml = rawBodyHtml ? sanitizeArticleHtml(rawBodyHtml) : paragraphsToHtml(body);
 
   if (!title || !excerpt || !slug || (!isPdfPost && !bodyHtml)) {
-    throw new Error("文章標題、摘要與 PDF 檔都必填。");
+    throw new Error("請提供文章標題、摘要，以及 PDF 檔案或內文。");
   }
 
   await mkdir(path.join(root, "articles"), { recursive: true });
@@ -366,7 +354,7 @@ const publishPost = async (payload) => {
 
   if (payload.cover?.dataUrl) {
     const match = String(payload.cover.dataUrl).match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/);
-    if (!match) throw new Error("封面圖片格式無法辨識。");
+    if (!match) throw new Error("封面圖片格式不正確。");
 
     const extension = match[1].split("/")[1].replace("jpeg", "jpg");
     const imageFilename = `${slug}.${extension}`;
@@ -379,7 +367,7 @@ const publishPost = async (payload) => {
   let pdfPath = "";
   if (isPdfPost) {
     const match = String(payload.pdf.dataUrl).match(/^data:application\/pdf;base64,(.+)$/);
-    if (!match) throw new Error("PDF 檔案格式無法辨識。");
+    if (!match) throw new Error("PDF 檔案格式不正確。");
 
     const pdfFilename = `${slug}.pdf`;
     const pdfFilePath = path.join(root, "assets", "uploads", pdfFilename);
@@ -400,13 +388,14 @@ const publishPost = async (payload) => {
       });
   await writeFile(articlePath, articleHtml, "utf8");
 
+  const tag = tagLabels[category] || "旅行文章";
   const posts = await readPosts();
   const postEntry = {
     title,
     excerpt,
     category,
-    tag: tagLabels[category] || "旅行文章",
-    keywords: `${title} ${excerpt} ${tagLabels[category] || "旅行文章"}`,
+    tag,
+    keywords: `${title} ${excerpt} ${tag}`,
     image,
     imageAlt: title,
     url: `articles/${articleFilename}`,
@@ -415,9 +404,9 @@ const publishPost = async (payload) => {
   const nextPosts = [postEntry, ...posts.filter((post) => post.url !== postEntry.url)];
   await writePosts(nextPosts);
 
-  await commitAndPush(["articles", "assets/uploads", "posts/posts.json"], `Add ${title}`);
+  const sync = await commitAndPush(["articles", "assets/uploads", "posts/posts.json"], `Add ${title}`);
 
-  return { url: `articles/${articleFilename}`, postEntry };
+  return { url: `articles/${articleFilename}`, postEntry, sync };
 };
 
 const serveStatic = async (request, response) => {

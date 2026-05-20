@@ -3,19 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>新增文章 | 宇揚的旅遊札記</title>
-    <meta name="description" content="宇揚的旅遊札記文章新增工具。" />
+    <title>文章管理 | 宇揚的旅行筆記</title>
+    <meta name="description" content="宇揚的旅行筆記本機文章發布與管理頁。" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="admin-page">
       <section class="admin-header">
         <p class="eyebrow">Admin</p>
-        <h1>新增旅行文章</h1>
+        <h1>文章管理</h1>
         <p>
-          用 Word、Canva 或其他工具排好版後匯出 PDF，在這裡上傳成一篇部落格文章。
+          上傳 PDF 旅行文章與封面圖後，系統會產生文章頁、更新首頁清單，並嘗試提交到 GitHub。
         </p>
-        <p class="admin-mode" data-admin-mode>正在確認發布模式。</p>
+        <p class="admin-mode" data-admin-mode>正在檢查本機管理服務...</p>
       </section>
 
       <section class="admin-layout">
@@ -23,23 +23,23 @@
           <input name="originalUrl" type="hidden" data-original-url />
           <label>
             <span>文章標題</span>
-            <input name="title" type="text" placeholder="例如：首爾7天6夜之旅" required />
+            <input name="title" type="text" placeholder="例如：首爾 7 天旅行筆記" required />
           </label>
 
           <div class="form-row">
             <label>
               <span>文章分類</span>
               <select name="category">
-                <option value="city">國外遊記</option>
-                <option value="nature">台灣遊記</option>
-                <option value="food">翻譯雜談</option>
+                <option value="city">城市路線</option>
+                <option value="nature">自然風景</option>
+                <option value="food">美食餐桌</option>
               </select>
             </label>
           </div>
 
           <label>
             <span>摘要</span>
-            <textarea name="excerpt" rows="3" placeholder="例如：臨時起意的首爾獨旅~" required></textarea>
+            <textarea name="excerpt" rows="3" placeholder="用兩三句話說明這篇旅行筆記的重點。" required></textarea>
           </label>
 
           <label>
@@ -48,19 +48,19 @@
           </label>
 
           <label>
-            <span>PDF 文章檔</span>
+            <span>PDF 文章檔案</span>
             <input name="pdf" type="file" accept="application/pdf,.pdf" data-pdf-input required />
           </label>
 
           <div class="admin-actions">
-            <button class="button primary" type="submit" data-submit-label>產生文章</button>
-            <button class="button neutral" type="reset" data-cancel-edit>清空</button>
+            <button class="button primary" type="submit" data-submit-label>發布文章</button>
+            <button class="button neutral" type="reset" data-cancel-edit>取消</button>
           </div>
         </form>
 
         <aside class="admin-output" data-admin-output>
-          <h2>產生結果</h2>
-          <p>按「產生文章」後，PDF 會存進網站，這裡會顯示可以點開的公開文章網址。</p>
+          <h2>發布狀態</h2>
+          <p>請填寫文章資料並上傳 PDF。發布後會在下方文章列表中看到最新結果。</p>
         </aside>
       </section>
 
@@ -68,7 +68,7 @@
         <div class="admin-posts-header">
           <div>
             <p class="eyebrow">Posts</p>
-            <h2>文章管理</h2>
+            <h2>文章列表</h2>
           </div>
           <button class="button neutral" type="button" data-refresh-posts>重新整理</button>
         </div>
@@ -79,7 +79,7 @@
     </main>
 
     <footer class="site-footer">
-      <p>© 2026 譯黃大帝</p>
+      <p>© 2026 宇揚的旅行筆記</p>
     </footer>
 
     <script src="script.js"></script>

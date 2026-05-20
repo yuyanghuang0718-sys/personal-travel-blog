@@ -12,7 +12,7 @@ let activeFilter = "all";
 let storyCards = [];
 
 const escapeHtml = (value = "") =>
-  value.replace(/[&<>"']/g, (character) => {
+  String(value).replace(/[&<>"']/g, (character) => {
     const entities = {
       "&": "&amp;",
       "<": "&lt;",
@@ -24,6 +24,7 @@ const escapeHtml = (value = "") =>
   });
 
 const updateHeader = () => {
+  if (!header) return;
   header.classList.toggle("scrolled", window.scrollY > 12);
 };
 
@@ -66,7 +67,7 @@ const renderStories = (posts) => {
             <span class="tag">${escapeHtml(post.tag)}</span>
             <h3>${escapeHtml(post.title)}</h3>
             <p>${escapeHtml(post.excerpt)}</p>
-            <a href="${escapeHtml(post.url)}">${post.url.startsWith("#") ? "閱讀筆記" : "閱讀遊記"}</a>
+            <a href="${escapeHtml(post.url)}">${post.url.startsWith("#") ? "閱讀段落" : "閱讀文章"}</a>
           </div>
         </article>
       `
@@ -81,12 +82,12 @@ const loadStories = async () => {
   if (!storyGrid) return;
 
   try {
-    const response = await fetch("posts/posts.json");
+    const response = await fetch(`posts/posts.json?updated=${Date.now()}`, { cache: "no-store" });
     if (!response.ok) throw new Error("posts not found");
     const posts = await response.json();
     renderStories(posts);
   } catch {
-    storyGrid.innerHTML = '<p class="empty-state">目前無法載入文章列表，請稍後再試。</p>';
+    storyGrid.innerHTML = '<p class="empty-state">目前無法載入文章清單，請稍後再試。</p>';
   }
 };
 
@@ -124,7 +125,7 @@ if (subscribeForm && formMessage) {
     event.preventDefault();
     const email = new FormData(subscribeForm).get("email") || subscribeForm.querySelector("input").value;
 
-    formMessage.textContent = `${email} 已加入訂閱名單。`;
+    formMessage.textContent = `${email} 已加入旅行筆記訂閱名單。`;
     subscribeForm.reset();
   });
 }

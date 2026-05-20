@@ -27,7 +27,7 @@ const fallbackSlug = () => {
 };
 
 const escapeHtml = (value = "") =>
-  value.replace(/[&<>"']/g, (character) => {
+  String(value).replace(/[&<>"']/g, (character) => {
     const entities = {
       "&": "&amp;",
       "<": "&lt;",
@@ -51,6 +51,27 @@ const fileToDataUrl = (file) =>
     reader.readAsDataURL(file);
   });
 
+const readJsonResponse = async (response, fallbackMessage) => {
+  const text = await response.text();
+  let result = null;
+
+  try {
+    result = text ? JSON.parse(text) : null;
+  } catch {
+    const message =
+      response.status === 404
+        ? "目前連到的是預覽服務，不是文章管理服務。請重新執行 open-admin.cmd 後再試。"
+        : text || fallbackMessage;
+    throw new Error(message);
+  }
+
+  if (!response.ok || !result?.ok) {
+    throw new Error(result?.message || fallbackMessage);
+  }
+
+  return result;
+};
+
 const isEditing = () => Boolean(originalUrlInput?.value);
 
 const setCreateMode = () => {
@@ -58,8 +79,8 @@ const setCreateMode = () => {
   adminForm.reset();
   if (originalUrlInput) originalUrlInput.value = "";
   if (pdfInput) pdfInput.required = true;
-  if (submitLabel) submitLabel.textContent = "產生文章";
-  if (cancelEditButton) cancelEditButton.textContent = "清空";
+  if (submitLabel) submitLabel.textContent = "發布文章";
+  if (cancelEditButton) cancelEditButton.textContent = "取消";
 };
 
 const setEditMode = (post) => {
@@ -80,7 +101,7 @@ const renderPosts = () => {
   if (!postList) return;
 
   if (!posts.length) {
-    postList.innerHTML = '<p class="empty-state">目前沒有文章。</p>';
+    postList.innerHTML = '<p class="empty-state">目前還沒有文章。</p>';
     return;
   }
 
@@ -111,8 +132,7 @@ const loadPosts = async () => {
 
   try {
     const response = await fetch("/api/posts");
-    const result = await response.json();
-    if (!response.ok || !result.ok) throw new Error(result.message || "文章清單載入失敗。");
+    const result = await readJsonResponse(response, "文章載入失敗");
     posts = result.posts;
     renderPosts();
   } catch (error) {
@@ -126,10 +146,10 @@ const updateAdminMode = async () => {
   try {
     const response = await fetch("/api/health");
     if (!response.ok) throw new Error("not local");
-    adminMode.textContent = "本機後台已連線，可以新增、編輯、刪除文章。";
+    adminMode.textContent = "本機管理服務已連線，可以發布、編輯與刪除文章。";
     adminMode.classList.add("ready");
   } catch {
-    adminMode.textContent = "請用 open-admin.cmd 啟動後台，才能發布或管理文章。";
+    adminMode.textContent = "請先執行 open-admin.cmd 啟動本機管理服務。";
     adminMode.classList.remove("ready");
   }
 };
@@ -141,7 +161,7 @@ const publishPost = async (formData) => {
   const slug = slugify(title) || fallbackSlug();
 
   if (!pdfFile?.size) {
-    throw new Error("請選擇 PDF 文章檔。");
+    throw new Error("請選擇 PDF 文章檔案。");
   }
 
   const coverDataUrl = await fileToDataUrl(coverFile);
@@ -161,9 +181,7 @@ const publishPost = async (formData) => {
     }),
   });
 
-  const result = await response.json();
-  if (!response.ok || !result.ok) throw new Error(result.message || "發布失敗。");
-  return result;
+  return readJsonResponse(response, "發布失敗");
 };
 
 const updatePost = async (formData) => {
@@ -180,9 +198,7 @@ const updatePost = async (formData) => {
     }),
   });
 
-  const result = await response.json();
-  if (!response.ok || !result.ok) throw new Error(result.message || "儲存失敗。");
-  return result;
+  return readJsonResponse(response, "更新失敗");
 };
 
 if (adminForm) {
@@ -192,18 +208,21 @@ if (adminForm) {
     const editing = isEditing();
 
     adminOutput.innerHTML = editing
-      ? "<h2>正在儲存</h2><p>正在更新文章基本資料。</p>"
-      : "<h2>正在發布</h2><p>正在上傳 PDF 並產生文章。</p>";
+      ? "<h2>正在更新</h2><p>正在儲存文章資料...</p>"
+      : "<h2>正在發布</h2><p>正在上傳 PDF 並建立文章頁...</p>";
 
     try {
       const result = editing ? await updatePost(formData) : await publishPost(formData);
-      const publicUrl = `https://yuyanghuang0718-sys.github.io/personal-travel-blog/${result.url || result.postEntry.url}`;
+      const postUrl = result.url || result.postEntry.url;
+      const publicUrl = `https://yuyanghuang0718-sys.github.io/personal-travel-blog/${postUrl}`;
+      const syncMessage = result.sync?.ok ? result.sync.message : result.sync?.message || "";
       adminOutput.innerHTML = `
-        <h2>${editing ? "已儲存修改" : "已產生文章"}</h2>
-        <p>文章清單已更新，GitHub Pages 通常需要 30 到 60 秒才會看到最新內容。</p>
+        <h2>${editing ? "更新完成" : "發布完成"}</h2>
+        <p>文章已寫入本機檔案。若 GitHub 推送成功，GitHub Pages 通常會在 30 到 60 秒後更新。</p>
+        ${syncMessage ? `<p>${escapeHtml(syncMessage)}</p>` : ""}
         <div class="publish-list">
           <div>
-            <span>文章網址</span>
+            <span>文章連結</span>
             <strong><a href="${publicUrl}" target="_blank" rel="noreferrer">${publicUrl}</a></strong>
           </div>
         </div>
@@ -232,14 +251,14 @@ postList?.addEventListener("click", async (event) => {
 
   if (event.target.matches("[data-edit-post]")) {
     setEditMode(post);
-    adminOutput.innerHTML = "<h2>編輯模式</h2><p>目前只修改標題、分類和摘要；PDF 檔案維持不變。</p>";
+    adminOutput.innerHTML = "<h2>編輯模式</h2><p>修改標題、分類或摘要後按下儲存。PDF 檔案不會被替換。</p>";
   }
 
   if (event.target.matches("[data-delete-post]")) {
-    const confirmed = window.confirm(`確定刪除「${post.title}」？這會從首頁清單移除，並刪除文章 HTML。`);
+    const confirmed = window.confirm(`確定要刪除「${post.title}」嗎？這會移除文章頁並更新清單。`);
     if (!confirmed) return;
 
-    adminOutput.innerHTML = "<h2>正在刪除</h2><p>正在移除文章。</p>";
+    adminOutput.innerHTML = "<h2>正在刪除</h2><p>正在移除文章...</p>";
     try {
       const response = await fetch("/api/delete-post", {
         method: "POST",
@@ -248,9 +267,8 @@ postList?.addEventListener("click", async (event) => {
         },
         body: JSON.stringify({ url: post.url }),
       });
-      const result = await response.json();
-      if (!response.ok || !result.ok) throw new Error(result.message || "刪除失敗。");
-      adminOutput.innerHTML = "<h2>已刪除</h2><p>文章已從清單移除。</p>";
+      await readJsonResponse(response, "刪除失敗");
+      adminOutput.innerHTML = "<h2>刪除完成</h2><p>文章已從清單和文章頁中移除。</p>";
       setCreateMode();
       await loadPosts();
     } catch (error) {
@@ -260,7 +278,6 @@ postList?.addEventListener("click", async (event) => {
 });
 
 refreshPostsButton?.addEventListener("click", loadPosts);
-
 updateAdminMode();
 loadPosts();
 })();
