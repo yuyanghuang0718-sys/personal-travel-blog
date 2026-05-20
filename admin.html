@@ -29,7 +29,7 @@
         <p class="eyebrow">Admin</p>
         <h1>新增旅行文章</h1>
         <p>
-          用本機後台開啟後，填好文章、選封面圖片，按「產生文章」就會直接發布到網站。
+          用 Word、Canva 或其他工具排好版後匯出 PDF，在這裡上傳成一篇部落格文章。
         </p>
         <p class="admin-mode" data-admin-mode>正在確認發布模式。</p>
       </section>
@@ -50,10 +50,6 @@
                 <option value="food">美食咖啡</option>
               </select>
             </label>
-            <label>
-              <span>文章網址代稱</span>
-              <input name="slug" type="text" placeholder="seoul-7-days" required />
-            </label>
           </div>
 
           <label>
@@ -62,23 +58,13 @@
           </label>
 
           <label>
-            <span>關鍵字</span>
-            <input name="keywords" type="text" placeholder="首爾 獨旅 Day1 機場巴士" />
-          </label>
-
-          <label>
             <span>封面圖片</span>
             <input name="cover" type="file" accept="image/*" />
           </label>
 
           <label>
-            <span>文章內容</span>
-            <textarea
-              name="body"
-              rows="14"
-              placeholder="直接貼遊記文字。空一行會分段。想分段標題請用：## Day 1：抵達首爾"
-              required
-            ></textarea>
+            <span>PDF 文章檔</span>
+            <input name="pdf" type="file" accept="application/pdf,.pdf" required />
           </label>
 
           <div class="admin-actions">
@@ -89,7 +75,7 @@
 
         <aside class="admin-output" data-admin-output>
           <h2>產生結果</h2>
-          <p>按「產生文章」後，這裡會直接顯示可以點開的公開文章網址。</p>
+          <p>按「產生文章」後，PDF 會存進網站，這裡會顯示可以點開的公開文章網址。</p>
         </aside>
       </section>
     </main>

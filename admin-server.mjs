@@ -11,11 +11,13 @@ const types = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
+  ".mjs": "text/javascript; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
   ".png": "image/png",
   ".webp": "image/webp",
+  ".pdf": "application/pdf",
 };
 
 const tagLabels = {
@@ -73,7 +75,33 @@ const paragraphsToHtml = (body) =>
     })
     .join("\n\n            ");
 
-const buildArticleHtml = ({ title, excerpt, category, body, coverPath }) => `<!doctype html>
+const sanitizeArticleHtml = (html = "") =>
+  html
+    .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
+    .replace(/\son\w+="[^"]*"/gi, "")
+    .replace(/\son\w+='[^']*'/gi, "")
+    .replace(/\scontenteditable="[^"]*"/gi, "")
+    .replace(/\u200b/g, "")
+    .replace(/javascript:/gi, "");
+
+const extractDataUrlImages = async (html, slug) => {
+  let imageIndex = 0;
+  let nextHtml = html;
+  const matches = [...html.matchAll(/src="data:(image\/[a-zA-Z0-9.+-]+);base64,([^"]+)"/g)];
+
+  for (const match of matches) {
+    imageIndex += 1;
+    const extension = match[1].split("/")[1].replace("jpeg", "jpg");
+    const imageFilename = `${slug}-inline-${String(imageIndex).padStart(2, "0")}.${extension}`;
+    const imagePath = path.join(root, "assets", "uploads", imageFilename);
+    await writeFile(imagePath, Buffer.from(match[2], "base64"));
+    nextHtml = nextHtml.replace(match[0], `src="../assets/uploads/${imageFilename}"`);
+  }
+
+  return nextHtml;
+};
+
+const buildArticleHtml = ({ title, excerpt, category, bodyHtml, coverPath }) => `<!doctype html>
 <html lang="zh-Hant">
   <head>
     <meta charset="UTF-8" />
@@ -114,7 +142,7 @@ const buildArticleHtml = ({ title, excerpt, category, body, coverPath }) => `<!d
 
         <div class="article-layout single-column">
           <div class="article-body">
-            ${paragraphsToHtml(body)}
+            ${bodyHtml}
           </div>
         </div>
       </article>
@@ -133,6 +161,130 @@ const buildArticleHtml = ({ title, excerpt, category, body, coverPath }) => `<!d
 </html>
 `;
 
+const buildPdfArticleHtml = ({ title, excerpt, category, coverPath, pdfPath }) => `<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${escapeHtml(title)} | 宇揚的旅遊札記</title>
+    <meta name="description" content="${escapeHtml(excerpt)}" />
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body>
+    <header class="site-header" data-header>
+      <a class="brand" href="../index.html" aria-label="宇揚的旅遊札記首頁">
+        <span class="brand-mark">途</span>
+        <span>宇揚的旅遊札記</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="site-nav" id="site-nav" data-nav>
+        <a href="../index.html#stories">旅行文章</a>
+        <a href="../index.html#journal">旅程日誌</a>
+        <a href="../index.html#subscribe">訂閱</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article-page">
+        <section class="article-hero">
+          <img src="${escapeHtml(coverPath)}" alt="${escapeHtml(title)}" />
+          <div class="article-hero-content">
+            <a class="back-link" href="../index.html#stories">返回文章列表</a>
+            <p class="eyebrow">${escapeHtml(tagLabels[category] || "旅行文章")}</p>
+            <h1>${escapeHtml(title)}</h1>
+            <p>${escapeHtml(excerpt)}</p>
+          </div>
+        </section>
+
+        <div class="article-layout single-column">
+          <div class="article-body">
+            <div class="pdf-rendered-article" data-pdf-renderer data-pdf-url="${escapeHtml(pdfPath)}">
+              <p class="pdf-loading">正在載入文章內容...</p>
+              <iframe
+                class="pdf-article-frame"
+                src="${escapeHtml(pdfPath)}#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                title="${escapeHtml(title)}"
+                hidden
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 宇揚的旅遊札記</p>
+      <div>
+        <a href="../index.html#stories">文章</a>
+        <a href="../index.html#subscribe">訂閱</a>
+      </div>
+    </footer>
+
+    <script src="../script.js"></script>
+    <script type="module">
+      import * as pdfjsLib from "../assets/vendor/pdfjs/pdf.min.mjs";
+
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "../assets/vendor/pdfjs/pdf.worker.min.mjs";
+
+      const container = document.querySelector("[data-pdf-renderer]");
+      const loading = container?.querySelector(".pdf-loading");
+
+      const renderPdf = async () => {
+        if (!container) return;
+
+        const fallbackFrame = container.querySelector(".pdf-article-frame");
+        const fallbackTimer = window.setTimeout(() => {
+          if (container.querySelectorAll(".pdf-page-canvas").length > 0) return;
+          if (loading) loading.remove();
+          if (fallbackFrame) fallbackFrame.hidden = false;
+        }, 2500);
+
+        try {
+          const pdf = await pdfjsLib.getDocument(container.dataset.pdfUrl).promise;
+          if (loading) loading.remove();
+          if (fallbackFrame) fallbackFrame.remove();
+
+          for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+            const page = await pdf.getPage(pageNumber);
+            const baseViewport = page.getViewport({ scale: 1 });
+            const availableWidth = Math.min(container.clientWidth || 900, 980);
+            const scale = availableWidth / baseViewport.width;
+            const viewport = page.getViewport({ scale });
+            const pixelRatio = window.devicePixelRatio || 1;
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+
+            canvas.className = "pdf-page-canvas";
+            canvas.width = Math.floor(viewport.width * pixelRatio);
+            canvas.height = Math.floor(viewport.height * pixelRatio);
+            canvas.style.width = Math.floor(viewport.width) + "px";
+            canvas.style.height = Math.floor(viewport.height) + "px";
+
+            await page.render({
+              canvasContext: context,
+              viewport,
+              transform: pixelRatio === 1 ? null : [pixelRatio, 0, 0, pixelRatio, 0, 0],
+            }).promise;
+
+            container.append(canvas);
+          }
+          window.clearTimeout(fallbackTimer);
+        } catch {
+          if (loading) loading.remove();
+          if (fallbackFrame) fallbackFrame.hidden = false;
+        }
+      };
+
+      renderPdf();
+    </script>
+  </body>
+</html>
+`;
+
 const sendJson = (response, status, payload) => {
   response.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
   response.end(JSON.stringify(payload));
@@ -142,12 +294,14 @@ const publishPost = async (payload) => {
   const title = String(payload.title || "").trim();
   const excerpt = String(payload.excerpt || "").trim();
   const category = String(payload.category || "city");
-  const keywords = String(payload.keywords || "").trim();
   const body = String(payload.body || "").trim();
+  const rawBodyHtml = String(payload.bodyHtml || "").trim();
   const slug = getSafeSlug(String(payload.slug || title));
+  const isPdfPost = Boolean(payload.pdf?.dataUrl);
+  const bodyHtml = rawBodyHtml ? sanitizeArticleHtml(rawBodyHtml) : paragraphsToHtml(body);
 
-  if (!title || !excerpt || !body || !slug) {
-    throw new Error("文章標題、摘要、網址代稱與內容都必填。");
+  if (!title || !excerpt || !slug || (!isPdfPost && !bodyHtml)) {
+    throw new Error("文章標題、摘要與 PDF 檔都必填。");
   }
 
   await mkdir(path.join(root, "articles"), { recursive: true });
@@ -168,9 +322,28 @@ const publishPost = async (payload) => {
     coverPath = `../${image}`;
   }
 
+  let pdfPath = "";
+  if (isPdfPost) {
+    const match = String(payload.pdf.dataUrl).match(/^data:application\/pdf;base64,(.+)$/);
+    if (!match) throw new Error("PDF 檔案格式無法辨識。");
+
+    const pdfFilename = `${slug}.pdf`;
+    const pdfFilePath = path.join(root, "assets", "uploads", pdfFilename);
+    await writeFile(pdfFilePath, Buffer.from(match[1], "base64"));
+    pdfPath = `../assets/uploads/${pdfFilename}`;
+  }
+
   const articleFilename = `${slug}.html`;
   const articlePath = path.join(root, "articles", articleFilename);
-  const articleHtml = buildArticleHtml({ title, excerpt, category, body, coverPath });
+  const articleHtml = isPdfPost
+    ? buildPdfArticleHtml({ title, excerpt, category, coverPath, pdfPath })
+    : buildArticleHtml({
+        title,
+        excerpt,
+        category,
+        bodyHtml: await extractDataUrlImages(bodyHtml, slug),
+        coverPath,
+      });
   await writeFile(articlePath, articleHtml, "utf8");
 
   const postsPath = path.join(root, "posts", "posts.json");
@@ -180,7 +353,7 @@ const publishPost = async (payload) => {
     excerpt,
     category,
     tag: tagLabels[category] || "旅行文章",
-    keywords,
+    keywords: `${title} ${excerpt} ${tagLabels[category] || "旅行文章"}`,
     image,
     imageAlt: title,
     url: `articles/${articleFilename}`,

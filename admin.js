@@ -36,7 +36,7 @@ const updateAdminMode = async () => {
   try {
     const response = await fetch("/api/health");
     if (!response.ok) throw new Error("not local");
-    adminMode.textContent = "目前是直接發布模式：填完後按「產生文章」就會上線。";
+    adminMode.textContent = "目前是 PDF 文章發布模式：上傳 PDF 後會直接產生文章頁。";
     adminMode.classList.add("ready");
   } catch {
     adminMode.textContent = "請用 open-admin.cmd 開啟後台，才可以直接發布。";
@@ -50,12 +50,19 @@ if (adminForm) {
     const formData = new FormData(adminForm);
     const title = formData.get("title").trim();
     const coverFile = formData.get("cover");
-    const slug = slugify(formData.get("slug") || title) || fallbackSlug();
+    const pdfFile = formData.get("pdf");
+    const slug = slugify(title) || fallbackSlug();
 
-    adminOutput.innerHTML = "<h2>發布中</h2><p>正在寫入文章並推送到 GitHub Pages。</p>";
+    if (!pdfFile?.size) {
+      adminOutput.innerHTML = "<h2>尚未發布</h2><p>請先選擇 PDF 文章檔。</p>";
+      return;
+    }
+
+    adminOutput.innerHTML = "<h2>發布中</h2><p>正在上傳 PDF 並產生文章頁。</p>";
 
     try {
       const coverDataUrl = await fileToDataUrl(coverFile);
+      const pdfDataUrl = await fileToDataUrl(pdfFile);
       const response = await fetch("/api/publish", {
         method: "POST",
         headers: {
@@ -65,10 +72,9 @@ if (adminForm) {
           title,
           excerpt: formData.get("excerpt").trim(),
           category: formData.get("category"),
-          body: formData.get("body").trim(),
           slug,
-          keywords: formData.get("keywords").trim(),
           cover: coverDataUrl ? { name: coverFile.name, dataUrl: coverDataUrl } : null,
+          pdf: { name: pdfFile.name, dataUrl: pdfDataUrl },
         }),
       });
       const result = await response.json();
@@ -77,7 +83,7 @@ if (adminForm) {
       const publicUrl = `https://yuyanghuang0718-sys.github.io/personal-travel-blog/${result.url}`;
       adminOutput.innerHTML = `
         <h2>已發布</h2>
-        <p>文章已送出。GitHub Pages 通常會在 30 到 60 秒內更新。</p>
+        <p>PDF 文章已送出。GitHub Pages 通常會在 30 到 60 秒內更新。</p>
         <div class="publish-list">
           <div>
             <span>文章網址</span>
