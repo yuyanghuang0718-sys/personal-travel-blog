@@ -39,13 +39,15 @@
 
         <div class="article-layout single-column">
           <div class="article-body">
-            <div class="pdf-actions">
-              <a class="button primary" href="../assets/uploads/112.pdf" target="_blank" rel="noreferrer">開啟 PDF</a>
-              <a class="button neutral" href="../assets/uploads/112.pdf" download>下載 PDF</a>
+            <div class="pdf-rendered-article" data-pdf-renderer data-pdf-url="../assets/uploads/112.pdf">
+              <p class="pdf-loading">正在載入文章內容...</p>
+              <iframe
+                class="pdf-article-frame"
+                src="../assets/uploads/112.pdf#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+                title="112"
+                hidden
+              ></iframe>
             </div>
-            <object class="pdf-viewer" data="../assets/uploads/112.pdf" type="application/pdf">
-              <p>這個瀏覽器無法直接預覽 PDF。請使用上方按鈕開啟或下載。</p>
-            </object>
           </div>
         </div>
       </article>
@@ -60,5 +62,61 @@
     </footer>
 
     <script src="../script.js"></script>
+    <script type="module">
+      import * as pdfjsLib from "../assets/vendor/pdfjs/pdf.min.mjs";
+
+      pdfjsLib.GlobalWorkerOptions.workerSrc = "../assets/vendor/pdfjs/pdf.worker.min.mjs";
+
+      const container = document.querySelector("[data-pdf-renderer]");
+      const loading = container?.querySelector(".pdf-loading");
+
+      const renderPdf = async () => {
+        if (!container) return;
+
+        const fallbackFrame = container.querySelector(".pdf-article-frame");
+        const fallbackTimer = window.setTimeout(() => {
+          if (container.querySelectorAll(".pdf-page-canvas").length > 0) return;
+          if (loading) loading.remove();
+          if (fallbackFrame) fallbackFrame.hidden = false;
+        }, 2500);
+
+        try {
+          const pdf = await pdfjsLib.getDocument(container.dataset.pdfUrl).promise;
+          if (loading) loading.remove();
+          if (fallbackFrame) fallbackFrame.remove();
+
+          for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+            const page = await pdf.getPage(pageNumber);
+            const baseViewport = page.getViewport({ scale: 1 });
+            const availableWidth = Math.min(container.clientWidth || 900, 980);
+            const scale = availableWidth / baseViewport.width;
+            const viewport = page.getViewport({ scale });
+            const pixelRatio = window.devicePixelRatio || 1;
+            const canvas = document.createElement("canvas");
+            const context = canvas.getContext("2d");
+
+            canvas.className = "pdf-page-canvas";
+            canvas.width = Math.floor(viewport.width * pixelRatio);
+            canvas.height = Math.floor(viewport.height * pixelRatio);
+            canvas.style.width = Math.floor(viewport.width) + "px";
+            canvas.style.height = Math.floor(viewport.height) + "px";
+
+            await page.render({
+              canvasContext: context,
+              viewport,
+              transform: pixelRatio === 1 ? null : [pixelRatio, 0, 0, pixelRatio, 0, 0],
+            }).promise;
+
+            container.append(canvas);
+          }
+          window.clearTimeout(fallbackTimer);
+        } catch {
+          if (loading) loading.remove();
+          if (fallbackFrame) fallbackFrame.hidden = false;
+        }
+      };
+
+      renderPdf();
+    </script>
   </body>
 </html>
