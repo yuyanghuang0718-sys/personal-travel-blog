@@ -36,6 +36,7 @@
 
       <section class="admin-layout">
         <form class="admin-form" data-admin-form>
+          <input name="originalUrl" type="hidden" data-original-url />
           <label>
             <span>文章標題</span>
             <input name="title" type="text" placeholder="例如：首爾7天6夜之旅" required />
@@ -64,12 +65,12 @@
 
           <label>
             <span>PDF 文章檔</span>
-            <input name="pdf" type="file" accept="application/pdf,.pdf" required />
+            <input name="pdf" type="file" accept="application/pdf,.pdf" data-pdf-input required />
           </label>
 
           <div class="admin-actions">
-            <button class="button primary" type="submit">產生文章</button>
-            <button class="button neutral" type="reset">清空</button>
+            <button class="button primary" type="submit" data-submit-label>產生文章</button>
+            <button class="button neutral" type="reset" data-cancel-edit>清空</button>
           </div>
         </form>
 
@@ -77,6 +78,19 @@
           <h2>產生結果</h2>
           <p>按「產生文章」後，PDF 會存進網站，這裡會顯示可以點開的公開文章網址。</p>
         </aside>
+      </section>
+
+      <section class="admin-posts">
+        <div class="admin-posts-header">
+          <div>
+            <p class="eyebrow">Posts</p>
+            <h2>文章管理</h2>
+          </div>
+          <button class="button neutral" type="button" data-refresh-posts>重新整理</button>
+        </div>
+        <div class="admin-post-list" data-post-list>
+          <p class="empty-state">正在載入文章...</p>
+        </div>
       </section>
     </main>
 

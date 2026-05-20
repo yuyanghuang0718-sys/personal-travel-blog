@@ -1,5 +1,5 @@
 import { createServer } from "node:http";
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir, unlink } from "node:fs/promises";
 import { execFile } from "node:child_process";
 import path from "node:path";
 import { promisify } from "node:util";
@@ -189,7 +189,7 @@ const buildPdfArticleHtml = ({ title, excerpt, category, coverPath, pdfPath }) =
     </header>
 
     <main>
-      <article class="article-page">
+      <article class="article-page pdf-post-page">
         <section class="article-hero">
           <img src="${escapeHtml(coverPath)}" alt="${escapeHtml(title)}" />
           <div class="article-hero-content">
@@ -202,7 +202,7 @@ const buildPdfArticleHtml = ({ title, excerpt, category, coverPath, pdfPath }) =
 
         <div class="article-layout single-column">
           <div class="article-body">
-            <div class="pdf-rendered-article" data-pdf-renderer data-pdf-url="${escapeHtml(pdfPath)}">
+            <div class="pdf-rendered-article" data-pdf-renderer data-pdf-url="${escapeHtml(pdfPath)}" data-title="${escapeHtml(title)}" data-excerpt="${escapeHtml(excerpt)}">
               <p class="pdf-loading">正在載入文章內容...</p>
               <iframe
                 class="pdf-article-frame"
@@ -225,62 +225,7 @@ const buildPdfArticleHtml = ({ title, excerpt, category, coverPath, pdfPath }) =
     </footer>
 
     <script src="../script.js"></script>
-    <script type="module">
-      import * as pdfjsLib from "../assets/vendor/pdfjs/pdf.min.mjs";
-
-      pdfjsLib.GlobalWorkerOptions.workerSrc = "../assets/vendor/pdfjs/pdf.worker.min.mjs";
-
-      const container = document.querySelector("[data-pdf-renderer]");
-      const loading = container?.querySelector(".pdf-loading");
-
-      const renderPdf = async () => {
-        if (!container) return;
-
-        const fallbackFrame = container.querySelector(".pdf-article-frame");
-        const fallbackTimer = window.setTimeout(() => {
-          if (container.querySelectorAll(".pdf-page-canvas").length > 0) return;
-          if (loading) loading.remove();
-          if (fallbackFrame) fallbackFrame.hidden = false;
-        }, 2500);
-
-        try {
-          const pdf = await pdfjsLib.getDocument(container.dataset.pdfUrl).promise;
-          if (loading) loading.remove();
-          if (fallbackFrame) fallbackFrame.remove();
-
-          for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
-            const page = await pdf.getPage(pageNumber);
-            const baseViewport = page.getViewport({ scale: 1 });
-            const availableWidth = Math.min(container.clientWidth || 900, 980);
-            const scale = availableWidth / baseViewport.width;
-            const viewport = page.getViewport({ scale });
-            const pixelRatio = window.devicePixelRatio || 1;
-            const canvas = document.createElement("canvas");
-            const context = canvas.getContext("2d");
-
-            canvas.className = "pdf-page-canvas";
-            canvas.width = Math.floor(viewport.width * pixelRatio);
-            canvas.height = Math.floor(viewport.height * pixelRatio);
-            canvas.style.width = Math.floor(viewport.width) + "px";
-            canvas.style.height = Math.floor(viewport.height) + "px";
-
-            await page.render({
-              canvasContext: context,
-              viewport,
-              transform: pixelRatio === 1 ? null : [pixelRatio, 0, 0, pixelRatio, 0, 0],
-            }).promise;
-
-            container.append(canvas);
-          }
-          window.clearTimeout(fallbackTimer);
-        } catch {
-          if (loading) loading.remove();
-          if (fallbackFrame) fallbackFrame.hidden = false;
-        }
-      };
-
-      renderPdf();
-    </script>
+    <script type="module" src="../pdf-blog-renderer.js"></script>
   </body>
 </html>
 `;
@@ -288,6 +233,115 @@ const buildPdfArticleHtml = ({ title, excerpt, category, coverPath, pdfPath }) =
 const sendJson = (response, status, payload) => {
   response.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
   response.end(JSON.stringify(payload));
+};
+
+const postsPath = () => path.join(root, "posts", "posts.json");
+
+const readPosts = async () => JSON.parse(await readFile(postsPath(), "utf8"));
+
+const writePosts = async (posts) => {
+  await writeFile(postsPath(), `${JSON.stringify(posts, null, 2)}\n`, "utf8");
+};
+
+const commitAndPush = async (files, message) => {
+  await execFileAsync("git", ["add", ...files]);
+  try {
+    await execFileAsync("git", ["diff", "--cached", "--quiet"]);
+    return false;
+  } catch {
+    await execFileAsync("git", ["commit", "-m", message]);
+    await execFileAsync("git", ["push"]);
+    return true;
+  }
+};
+
+const getSafeArticlePath = (url) => {
+  const normalized = String(url || "").replaceAll("\\", "/");
+  if (!normalized.startsWith("articles/") || !normalized.endsWith(".html") || normalized.includes("..")) {
+    throw new Error("文章路徑不正確。");
+  }
+
+  const articlePath = path.resolve(root, normalized);
+  const articlesRoot = path.resolve(root, "articles");
+  if (!articlePath.startsWith(articlesRoot + path.sep)) {
+    throw new Error("文章路徑不正確。");
+  }
+
+  return articlePath;
+};
+
+const updateArticleShell = async ({ url, title, excerpt, category }) => {
+  const articlePath = getSafeArticlePath(url);
+  let html = await readFile(articlePath, "utf8");
+  const tag = tagLabels[category] || tagLabels.city;
+
+  html = html
+    .replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(title)} | 宇揚的旅遊札記</title>`)
+    .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${escapeHtml(excerpt)}" />`)
+    .replace(/<p class="eyebrow">[\s\S]*?<\/p>/, `<p class="eyebrow">${escapeHtml(tag)}</p>`)
+    .replace(/<h1>[\s\S]*?<\/h1>/, `<h1>${escapeHtml(title)}</h1>`)
+    .replace(/<h1>[\s\S]*?<\/h1>\s*<p>[\s\S]*?<\/p>/, `<h1>${escapeHtml(title)}</h1>\n            <p>${escapeHtml(excerpt)}</p>`)
+    .replace(/(<img src="[^"]*" alt=")[^"]*(" \/>)/, `$1${escapeHtml(title)}$2`)
+    .replace(/data-title="[^"]*"/, `data-title="${escapeHtml(title)}"`)
+    .replace(/data-excerpt="[^"]*"/, `data-excerpt="${escapeHtml(excerpt)}"`)
+    .replace(/title="[^"]*"\s+hidden/, `title="${escapeHtml(title)}"\n                hidden`);
+
+  await writeFile(articlePath, html, "utf8");
+};
+
+const updatePost = async (payload) => {
+  const originalUrl = String(payload.originalUrl || "").trim();
+  const title = String(payload.title || "").trim();
+  const excerpt = String(payload.excerpt || "").trim();
+  const category = String(payload.category || "city");
+
+  if (!originalUrl || !title || !excerpt) {
+    throw new Error("請選擇文章並填好標題與摘要。");
+  }
+
+  const posts = await readPosts();
+  const index = posts.findIndex((post) => post.url === originalUrl);
+  if (index < 0) throw new Error("找不到這篇文章。");
+
+  const tag = tagLabels[category] || tagLabels.city;
+  posts[index] = {
+    ...posts[index],
+    title,
+    excerpt,
+    category,
+    tag,
+    keywords: `${title} ${excerpt} ${tag}`,
+    imageAlt: title,
+  };
+
+  await updateArticleShell({ url: originalUrl, title, excerpt, category });
+  await writePosts(posts);
+
+  await commitAndPush(["articles", "posts/posts.json"], `Update ${title}`);
+
+  return { postEntry: posts[index] };
+};
+
+const deletePost = async (payload) => {
+  const url = String(payload.url || "").trim();
+  if (!url) throw new Error("請選擇要刪除的文章。");
+
+  const articlePath = getSafeArticlePath(url);
+  const posts = await readPosts();
+  const post = posts.find((item) => item.url === url);
+  const nextPosts = posts.filter((item) => item.url !== url);
+  if (nextPosts.length === posts.length) throw new Error("找不到這篇文章。");
+
+  await writePosts(nextPosts);
+  try {
+    await unlink(articlePath);
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+
+  await commitAndPush(["articles", "posts/posts.json"], `Delete ${post?.title || url}`);
+
+  return { deletedUrl: url };
 };
 
 const publishPost = async (payload) => {
@@ -346,8 +400,7 @@ const publishPost = async (payload) => {
       });
   await writeFile(articlePath, articleHtml, "utf8");
 
-  const postsPath = path.join(root, "posts", "posts.json");
-  const posts = JSON.parse(await readFile(postsPath, "utf8"));
+  const posts = await readPosts();
   const postEntry = {
     title,
     excerpt,
@@ -360,11 +413,9 @@ const publishPost = async (payload) => {
     featured: false,
   };
   const nextPosts = [postEntry, ...posts.filter((post) => post.url !== postEntry.url)];
-  await writeFile(postsPath, `${JSON.stringify(nextPosts, null, 2)}\n`, "utf8");
+  await writePosts(nextPosts);
 
-  await execFileAsync("git", ["add", "articles", "assets/uploads", "posts/posts.json"]);
-  await execFileAsync("git", ["commit", "-m", `Add ${title}`]);
-  await execFileAsync("git", ["push"]);
+  await commitAndPush(["articles", "assets/uploads", "posts/posts.json"], `Add ${title}`);
 
   return { url: `articles/${articleFilename}`, postEntry };
 };
@@ -401,10 +452,41 @@ const server = createServer(async (request, response) => {
     return;
   }
 
+  if (url.pathname === "/api/posts") {
+    try {
+      sendJson(response, 200, { ok: true, posts: await readPosts() });
+    } catch (error) {
+      sendJson(response, 500, { ok: false, message: error.message });
+    }
+    return;
+  }
+
   if (url.pathname === "/api/publish" && request.method === "POST") {
     try {
       const payload = JSON.parse(await readRequestBody(request));
       const result = await publishPost(payload);
+      sendJson(response, 200, { ok: true, ...result });
+    } catch (error) {
+      sendJson(response, 400, { ok: false, message: error.message });
+    }
+    return;
+  }
+
+  if (url.pathname === "/api/update-post" && request.method === "POST") {
+    try {
+      const payload = JSON.parse(await readRequestBody(request));
+      const result = await updatePost(payload);
+      sendJson(response, 200, { ok: true, ...result });
+    } catch (error) {
+      sendJson(response, 400, { ok: false, message: error.message });
+    }
+    return;
+  }
+
+  if (url.pathname === "/api/delete-post" && request.method === "POST") {
+    try {
+      const payload = JSON.parse(await readRequestBody(request));
+      const result = await deletePost(payload);
       sendJson(response, 200, { ok: true, ...result });
     } catch (error) {
       sendJson(response, 400, { ok: false, message: error.message });
