@@ -1,11 +1,22 @@
 [
   {
+    "title": "2026首爾六天五夜獨旅part1",
+    "excerpt": "臨時起意的首爾獨旅~",
+    "category": "city",
+    "tag": "城市散步",
+    "keywords": "2026首爾六天五夜獨旅part1 臨時起意的首爾獨旅~ 城市散步",
+    "image": "assets/uploads/2026-part1.jpg",
+    "imageAlt": "2026首爾六天五夜獨旅part1",
+    "url": "articles/2026-part1.html",
+    "featured": false
+  },
+  {
     "title": "首爾7天6夜之旅 -part2",
     "excerpt": "首爾day2",
     "category": "city",
     "tag": "城市散步",
     "keywords": "首爾day2",
-    "image": "assets/uploads/swoul-day2.png",
+    "image": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
     "imageAlt": "首爾7天6夜之旅 -part2",
     "url": "articles/swoul-day2.html",
     "featured": false
