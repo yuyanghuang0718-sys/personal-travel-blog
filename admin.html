@@ -29,7 +29,7 @@
         <p class="eyebrow">Admin</p>
         <h1>新增旅行文章</h1>
         <p>
-          填好文章內容後，這裡會產生文章檔案、首頁文章資料，以及圖片放置路徑。GitHub Pages 是靜態網站，所以這一版先用安全的檔案產生流程。
+          用本機後台開啟後，填好文章、選封面圖片，按「產生文章」就會直接發布到網站。
         </p>
         <p class="admin-mode" data-admin-mode>正在確認發布模式。</p>
       </section>
@@ -38,7 +38,7 @@
         <form class="admin-form" data-admin-form>
           <label>
             <span>文章標題</span>
-            <input name="title" type="text" placeholder="例如：釜山四天三夜海線旅行" required />
+            <input name="title" type="text" placeholder="例如：首爾7天6夜之旅" required />
           </label>
 
           <div class="form-row">
@@ -52,18 +52,18 @@
             </label>
             <label>
               <span>文章網址代稱</span>
-              <input name="slug" type="text" placeholder="busan-4-days" required />
+              <input name="slug" type="text" placeholder="seoul-7-days" required />
             </label>
           </div>
 
           <label>
             <span>摘要</span>
-            <textarea name="excerpt" rows="3" placeholder="寫一小段會出現在首頁卡片上的摘要。" required></textarea>
+            <textarea name="excerpt" rows="3" placeholder="例如：臨時起意的首爾獨旅~" required></textarea>
           </label>
 
           <label>
             <span>關鍵字</span>
-            <input name="keywords" type="text" placeholder="首爾 咖啡 景點 週末" />
+            <input name="keywords" type="text" placeholder="首爾 獨旅 Day1 機場巴士" />
           </label>
 
           <label>
@@ -76,7 +76,7 @@
             <textarea
               name="body"
               rows="14"
-              placeholder="可以直接貼遊記文字。空一行會分成不同段落。若要分段標題，請用 ## Day 1：抵達"
+              placeholder="直接貼遊記文字。空一行會分段。想分段標題請用：## Day 1：抵達首爾"
               required
             ></textarea>
           </label>
@@ -89,7 +89,7 @@
 
         <aside class="admin-output" data-admin-output>
           <h2>產生結果</h2>
-          <p>填好內容後按「產生文章」，這裡會出現下載按鈕與發布清單。</p>
+          <p>按「產生文章」後，這裡會直接顯示可以點開的公開文章網址。</p>
         </aside>
       </section>
     </main>
