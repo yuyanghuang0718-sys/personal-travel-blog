@@ -1,0 +1,30 @@
+---
+const { url, title = "YouTube video" } = Astro.props;
+
+const getVideoId = (value = "") => {
+  if (/^[a-zA-Z0-9_-]{11}$/.test(value)) return value;
+
+  try {
+    const parsed = new URL(value);
+    if (parsed.hostname.includes("youtu.be")) return parsed.pathname.slice(1);
+    if (parsed.searchParams.has("v")) return parsed.searchParams.get("v");
+    const embedMatch = parsed.pathname.match(/\/embed\/([^/?]+)/);
+    return embedMatch?.[1] ?? "";
+  } catch {
+    return "";
+  }
+};
+
+const videoId = getVideoId(url);
+---
+
+{videoId && (
+  <figure class="article-embed">
+    <iframe
+      src={`https://www.youtube.com/embed/${videoId}`}
+      title={title}
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+  </figure>
+)}

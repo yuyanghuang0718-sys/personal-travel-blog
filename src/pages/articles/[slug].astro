@@ -2,6 +2,8 @@
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { categoryLabel } from "../../data/categories";
+import Youtube from "../../components/mdx/Youtube.astro";
+import ImageWithCaption from "../../components/mdx/ImageWithCaption.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts", ({ data }) => !data.draft);
@@ -30,7 +32,7 @@ const { Content } = await render(post);
 
       <div class="article-layout single-column">
         <div class="article-body">
-          <Content />
+          <Content components={{ Youtube, ImageWithCaption }} />
         </div>
       </div>
     </article>

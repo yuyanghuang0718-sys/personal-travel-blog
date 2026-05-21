@@ -1,0 +1,11 @@
+---
+const { src, alt = "", caption = "" } = Astro.props;
+const imageSrc = src?.startsWith("/")
+  ? `${import.meta.env.BASE_URL}${src.replace(/^\//, "")}`
+  : src;
+---
+
+<figure class="article-photo">
+  <img src={imageSrc} alt={alt} />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

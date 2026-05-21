@@ -1,12 +1,20 @@
 {
   "scripts": {
     "dev": "astro dev --host 127.0.0.1",
-    "build": "astro build",
+    "cms": "tinacms dev --noTelemetry -c \"astro dev --host 127.0.0.1\"",
+    "build": "tinacms build --local --skip-cloud-checks --noTelemetry && astro build",
+    "build:site": "astro build",
     "preview": "astro preview --host 127.0.0.1"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.0.0",
-    "astro": "^5.0.0"
+    "astro": "^5.0.0",
+    "tinacms": "^3.8.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@tinacms/cli": "^2.3.1"
+  },
+  "overrides": {
+    "better-sqlite3": "^12.10.0"
+  }
 }

@@ -6,7 +6,7 @@ Astro + MDX migration for the travel and translation blog.
 
 ```powershell
 npm.cmd install
-npm.cmd run dev
+npm.cmd run cms
 ```
 
 Open the local URL shown by Astro, usually:
@@ -15,12 +15,20 @@ Open the local URL shown by Astro, usually:
 http://127.0.0.1:4321/personal-travel-blog/
 ```
 
+Open the local TinaCMS admin at:
+
+```text
+http://127.0.0.1:4321/personal-travel-blog/admin/index.html
+```
+
 ## Build
 
 ```powershell
 $env:ASTRO_TELEMETRY_DISABLED='1'
 npm.cmd run build
 ```
+
+The build runs TinaCMS first so `public/admin` is generated, then Astro outputs the static site to `dist`.
 
 ## Content
 

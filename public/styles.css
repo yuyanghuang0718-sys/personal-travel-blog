@@ -817,6 +817,18 @@ textarea:focus {
   text-align: center;
 }
 
+.article-embed {
+  margin: 36px 0;
+}
+
+.article-embed iframe {
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 8px;
+  display: block;
+  width: 100%;
+}
+
 .tips-panel {
   background: #e9eee9;
   border-radius: 8px;
