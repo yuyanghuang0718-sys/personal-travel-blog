@@ -10,10 +10,11 @@ let activeFilter = "all";
 const updateStories = () => {
   if (!searchInput || !emptyState) return;
   const query = searchInput.value.trim().toLowerCase();
+  const activeCategories = activeFilter === "all" ? [] : activeFilter.split(",");
   let visibleCount = 0;
 
   storyCards.forEach((card) => {
-    const matchesCategory = activeFilter === "all" || card.dataset.category === activeFilter;
+    const matchesCategory = activeFilter === "all" || activeCategories.includes(card.dataset.category);
     const text = `${card.textContent} ${card.dataset.keywords}`.toLowerCase();
     const matchesSearch = !query || text.includes(query);
     const isVisible = matchesCategory && matchesSearch;

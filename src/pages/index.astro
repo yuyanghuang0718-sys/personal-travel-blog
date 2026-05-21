@@ -2,11 +2,26 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import StoryCard from "../components/StoryCard.astro";
-import { categories } from "../data/categories";
+import { homepageTabs } from "../data/categories";
 
 const posts = (await getCollection("posts"))
   .filter((post) => !post.data.draft)
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+
+const legacyPosts = [
+  {
+    title: "首爾7天6夜之旅part1",
+    excerpt: "韓國GOGOGO!",
+    category: "city",
+    tag: "國外旅遊",
+    keywords: "首爾7天6夜之旅part1 韓國GOGOGO! 國外旅遊 首爾 韓國 旅行",
+    image: `${baseUrl}assets/uploads/7-6-part1.jpg`,
+    imageAlt: "首爾7天6夜之旅part1",
+    url: `${baseUrl}articles/7-6-part1.html`,
+  },
+];
 ---
 
 <BaseLayout
@@ -17,7 +32,7 @@ const posts = (await getCollection("posts"))
     <section class="hero">
       <img
         class="hero-image"
-        src={`${import.meta.env.BASE_URL}assets/blog-cover.png`}
+        src={`${baseUrl}assets/blog-cover.png`}
         alt="旅遊地圖與照片拼貼"
       />
       <div class="hero-overlay"></div>
@@ -40,13 +55,24 @@ const posts = (await getCollection("posts"))
         </label>
         <div class="category-tabs" role="tablist" aria-label="文章分類">
           <button class="tab active" type="button" data-filter="all">全部</button>
-          {categories.map((category) => (
+          {homepageTabs.map((category) => (
             <button class="tab" type="button" data-filter={category.value}>{category.label}</button>
           ))}
         </div>
       </div>
 
       <div class="story-grid" data-story-grid>
+        {legacyPosts.map((post) => (
+          <article class="story-card featured" data-category={post.category} data-keywords={post.keywords}>
+            <img src={post.image} alt={post.imageAlt} />
+            <div class="story-content">
+              <span class="tag">{post.tag}</span>
+              <h3>{post.title}</h3>
+              <p>{post.excerpt}</p>
+              <a href={post.url}>閱讀文章</a>
+            </div>
+          </article>
+        ))}
         {posts.map((post) => <StoryCard post={post} />)}
       </div>
       <p class="empty-state" data-empty hidden>找不到符合條件的文章。</p>
@@ -73,5 +99,5 @@ const posts = (await getCollection("posts"))
     <p>© 2026 譯黃大帝</p>
   </footer>
 
-  <script src={`${import.meta.env.BASE_URL}astro-main.js`}></script>
+  <script src={`${baseUrl}astro-main.js`}></script>
 </BaseLayout>

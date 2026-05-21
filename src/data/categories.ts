@@ -5,6 +5,12 @@ export const categories = [
   { value: "overseas", label: "國外旅遊" },
 ] as const;
 
+export const homepageTabs = [
+  { value: "overseas,city", label: "國外旅遊" },
+  { value: "city-walk,nature", label: "國內旅遊" },
+  { value: "food", label: "翻譯雜談" },
+];
+
 export type CategoryValue = (typeof categories)[number]["value"];
 
 export const categoryLabel = (value: string) =>

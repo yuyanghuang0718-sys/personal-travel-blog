@@ -15,15 +15,16 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
 
 <BaseLayout title={`${post.data.title} | 譯黃大帝`} description={post.data.excerpt}>
   <main>
     <article class="article-page">
       <section class="article-hero">
-        <img src={`${import.meta.env.BASE_URL}${post.data.cover.replace(/^\//, "")}`} alt={post.data.coverAlt ?? post.data.title} />
+        <img src={`${baseUrl}${post.data.cover.replace(/^\//, "")}`} alt={post.data.coverAlt ?? post.data.title} />
         <div class="article-hero-content">
-          <a class="back-link" href={`${import.meta.env.BASE_URL}#stories`}>返回文章列表</a>
+          <a class="back-link" href={`${baseUrl}#stories`}>返回文章列表</a>
           <p class="eyebrow">{categoryLabel(post.data.category)}</p>
           <h1>{post.data.title}</h1>
           <p>{post.data.excerpt}</p>
@@ -41,8 +42,8 @@ const { Content } = await render(post);
   <footer class="site-footer">
     <p>© 2026 譯黃大帝</p>
     <div>
-      <a href={`${import.meta.env.BASE_URL}#stories`}>文章</a>
-      <a href={`${import.meta.env.BASE_URL}#subscribe`}>訂閱</a>
+      <a href={`${baseUrl}#stories`}>文章</a>
+      <a href={`${baseUrl}#subscribe`}>訂閱</a>
     </div>
   </footer>
 </BaseLayout>

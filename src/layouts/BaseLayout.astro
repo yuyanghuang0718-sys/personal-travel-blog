@@ -3,6 +3,7 @@ const {
   title = "譯黃大帝",
   description = "譯黃大帝，旅遊與翻譯文章整理。",
 } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 ---
 
 <!doctype html>
@@ -13,7 +14,7 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="preconnect" href="https://images.unsplash.com" />
-    <link rel="stylesheet" href={`${import.meta.env.BASE_URL}styles.css`} />
+    <link rel="stylesheet" href={`${baseUrl}styles.css`} />
   </head>
   <body>
     <slot />
