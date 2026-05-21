@@ -34,6 +34,9 @@ jobs:
         run: npm run build
         env:
           ASTRO_TELEMETRY_DISABLED: "1"
+          NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
+          TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
+          NEXT_PUBLIC_TINA_BRANCH: main
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

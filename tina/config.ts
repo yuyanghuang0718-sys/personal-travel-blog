@@ -1,11 +1,11 @@
 import { defineConfig } from "tinacms";
 
-const branch = process.env.HEAD || process.env.GITHUB_BRANCH || "main";
+const branch = process.env.NEXT_PUBLIC_TINA_BRANCH || process.env.HEAD || process.env.GITHUB_BRANCH || "main";
 
 export default defineConfig({
   branch,
-  clientId: null,
-  token: null,
+  clientId: process.env.NEXT_PUBLIC_TINA_CLIENT_ID || null,
+  token: process.env.TINA_TOKEN || null,
   build: {
     outputFolder: "admin",
     publicFolder: "public",
