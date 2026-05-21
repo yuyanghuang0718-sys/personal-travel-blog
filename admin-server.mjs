@@ -101,23 +101,6 @@ const extractDataUrlImages = async (html, slug) => {
   return nextHtml;
 };
 
-const articleHeader = () => `
-    <header class="site-header" data-header>
-      <a class="brand" href="../index.html" aria-label="宇揚的旅行筆記首頁">
-        <span class="brand-mark">旅</span>
-        <span>宇揚的旅行筆記</span>
-      </a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <nav class="site-nav" id="site-nav" data-nav>
-        <a href="../index.html#stories">文章</a>
-        <a href="../index.html#subscribe">訂閱</a>
-      </nav>
-    </header>`;
-
 const articleFooter = () => `
     <footer class="site-footer">
       <p>© 2026 譯黃大帝</p>
@@ -136,7 +119,7 @@ const buildArticleHtml = ({ title, excerpt, category, bodyHtml, coverPath }) => 
     <meta name="description" content="${escapeHtml(excerpt)}" />
     <link rel="stylesheet" href="../styles.css" />
   </head>
-  <body>${articleHeader()}
+  <body>
 
     <main>
       <article class="article-page">
@@ -173,7 +156,7 @@ const buildPdfArticleHtml = ({ title, excerpt, category, coverPath, pdfPath }) =
     <meta name="description" content="${escapeHtml(excerpt)}" />
     <link rel="stylesheet" href="../styles.css" />
   </head>
-  <body>${articleHeader()}
+  <body>
 
     <main>
       <article class="article-page pdf-post-page">
