@@ -2,8 +2,6 @@ const searchInput = document.querySelector("[data-search]");
 const filterButtons = [...document.querySelectorAll("[data-filter]")];
 const storyCards = [...document.querySelectorAll("[data-category]")];
 const emptyState = document.querySelector("[data-empty]");
-const subscribeForm = document.querySelector("[data-form]");
-const formMessage = document.querySelector("[data-form-message]");
 
 let activeFilter = "all";
 
@@ -35,10 +33,3 @@ filterButtons.forEach((button) => {
 });
 
 searchInput?.addEventListener("input", updateStories);
-
-subscribeForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const email = new FormData(subscribeForm).get("email") || subscribeForm.querySelector("input").value;
-  formMessage.textContent = `${email} 已加入文章訂閱名單。`;
-  subscribeForm.reset();
-});

@@ -60,13 +60,17 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
         <h2>及時收看最新文章</h2>
         <p>留下 Email，之後有新的文章時可以第一時間通知你。</p>
       </div>
-      <form class="subscribe-form" data-form>
+      <form
+        class="subscribe-form"
+        action="https://buttondown.com/api/emails/embed-subscribe/YOUR_BUTTONDOWN_USERNAME"
+        method="post"
+      >
         <label>
           <span>Email</span>
-          <input type="email" placeholder="you@example.com" required />
+          <input type="email" name="email" placeholder="you@example.com" required />
         </label>
+        <input type="hidden" name="embed" value="1" />
         <button class="button primary" type="submit">訂閱</button>
-        <p class="form-message" data-form-message role="status"></p>
       </form>
     </section>
   </main>
