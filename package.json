@@ -2,7 +2,7 @@
   "scripts": {
     "dev": "astro dev --host 127.0.0.1",
     "cms": "tinacms dev --noTelemetry -c \"astro dev --host 127.0.0.1\"",
-    "build": "tinacms build --noTelemetry && astro build",
+    "build": "tinacms build --skip-cloud-checks --noTelemetry && astro build",
     "build:local": "tinacms build --local --skip-cloud-checks --noTelemetry && astro build",
     "build:site": "astro build",
     "preview": "astro preview --host 127.0.0.1"
