@@ -49,7 +49,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
       </div>
 
       <div class="story-grid" data-story-grid>
-        {posts.map((post, index) => <StoryCard post={post} featured={index === 0} />)}
+        {posts.map((post) => <StoryCard post={post} />)}
       </div>
       <p class="empty-state" data-empty hidden>找不到符合條件的文章。</p>
     </section>

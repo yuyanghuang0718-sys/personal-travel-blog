@@ -6,10 +6,9 @@ const { post } = Astro.props;
 const { data } = post;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const articleUrl = `${baseUrl}articles/${getPostRouteSlug(post)}/`;
-const isFeatured = Boolean(Astro.props.featured);
 ---
 
-<article class:list={["story-card", { featured: isFeatured }]} data-category={data.category} data-keywords={`${data.title} ${data.excerpt} ${categoryLabel(data.category)}`}>
+<article class="story-card" data-category={data.category} data-keywords={`${data.title} ${data.excerpt} ${categoryLabel(data.category)}`}>
   <img src={`${baseUrl}${data.cover.replace(/^\//, "")}`} alt={data.coverAlt ?? data.title} />
   <div class="story-content">
     <span class="tag">{categoryLabel(data.category)}</span>
