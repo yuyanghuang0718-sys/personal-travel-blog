@@ -21,9 +21,9 @@ const types = {
 };
 
 const tagLabels = {
-  city: "城市路線",
-  nature: "自然風景",
-  food: "美食餐桌",
+  city: "國外旅遊",
+  nature: "國內旅遊",
+  food: "翻譯雜談",
 };
 
 const escapeHtml = (value = "") =>
@@ -120,7 +120,7 @@ const articleHeader = () => `
 
 const articleFooter = () => `
     <footer class="site-footer">
-      <p>© 2026 宇揚的旅行筆記</p>
+      <p>© 2026 譯黃大帝</p>
       <div>
         <a href="../index.html#stories">文章</a>
         <a href="../index.html#subscribe">訂閱</a>
