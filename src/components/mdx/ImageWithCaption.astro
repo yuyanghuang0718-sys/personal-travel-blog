@@ -1,13 +1,16 @@
 ---
-const { src, alt = "", title = "", caption = "" } = Astro.props;
+const { src, alt = "", title = "", caption = "", width = "" } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const imageSrc = src?.startsWith("/")
   ? `${baseUrl}${src.replace(/^\//, "")}`
   : src;
 const displayCaption = String(caption || title).trim();
+const imageWidth = String(width).trim();
+const normalizedWidth = /^\d+$/.test(imageWidth) ? `${imageWidth}px` : imageWidth;
+const figureStyle = normalizedWidth ? `--article-image-width: ${normalizedWidth};` : undefined;
 ---
 
-<figure class="article-photo">
+<figure class="article-photo" style={figureStyle}>
   <img src={imageSrc} alt={alt} />
   {displayCaption && <figcaption>{displayCaption}</figcaption>}
 </figure>

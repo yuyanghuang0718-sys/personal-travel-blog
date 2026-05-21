@@ -836,18 +836,17 @@ textarea:focus {
 
 .article-body .article-photo {
   margin: 48px auto;
-  max-width: 760px;
+  max-width: min(var(--article-image-width, 760px), 100%);
   text-align: center;
 }
 
 .article-photo img {
-  aspect-ratio: 16 / 9;
   border-radius: 8px;
   height: auto;
   margin: 0 auto;
   max-width: 100%;
-  object-fit: cover;
-  width: min(760px, 100%);
+  object-fit: contain;
+  width: 100%;
 }
 
 .article-photo figcaption {
