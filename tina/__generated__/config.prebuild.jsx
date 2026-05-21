@@ -28,7 +28,7 @@ var config_default = defineConfig({
           router: ({ document }) => {
             const filename = document?._sys?.filename;
             const routeSlug = filename || String(document?.slug || "").replace(/^\/?articles\//, "").replace(/\/$/, "");
-            return `/personal-travel-blog/articles/${routeSlug}/`;
+            return `/articles/${routeSlug}/`;
           }
         },
         fields: [
