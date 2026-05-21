@@ -835,11 +835,11 @@ textarea:focus {
 }
 
 .article-photo figcaption {
-  color: var(--muted);
-  font-size: 0.86rem;
+  color: #6b7280;
+  font-size: 14px;
   font-style: italic;
   line-height: 1.6;
-  margin: 12px auto 0;
+  margin: 8px auto 24px;
   max-width: 680px;
   text-align: center;
 }
