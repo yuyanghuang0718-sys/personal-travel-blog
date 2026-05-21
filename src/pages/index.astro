@@ -1,0 +1,77 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import StoryCard from "../components/StoryCard.astro";
+import { categories } from "../data/categories";
+
+const posts = (await getCollection("posts"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout
+  title="譯黃大帝 | 旅遊 × 翻譯"
+  description="譯黃大帝，整理旅遊與翻譯文章。"
+>
+  <main id="top">
+    <section class="hero">
+      <img
+        class="hero-image"
+        src={`${import.meta.env.BASE_URL}assets/blog-cover.png`}
+        alt="旅遊地圖與照片拼貼"
+      />
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1>譯黃大帝<br />旅遊 × 翻譯</h1>
+        <p class="hero-copy">譯起環遊世界</p>
+      </div>
+    </section>
+
+    <section class="section stories-section" id="stories">
+      <div class="section-heading">
+        <p class="eyebrow">Latest Stories</p>
+        <h2>最新文章</h2>
+      </div>
+
+      <div class="filter-bar" aria-label="文章篩選">
+        <label class="search-field">
+          <span>搜尋文章</span>
+          <input type="search" data-search />
+        </label>
+        <div class="category-tabs" role="tablist" aria-label="文章分類">
+          <button class="tab active" type="button" data-filter="all">全部</button>
+          {categories.map((category) => (
+            <button class="tab" type="button" data-filter={category.value}>{category.label}</button>
+          ))}
+        </div>
+      </div>
+
+      <div class="story-grid" data-story-grid>
+        {posts.map((post) => <StoryCard post={post} />)}
+      </div>
+      <p class="empty-state" data-empty hidden>找不到符合條件的文章。</p>
+    </section>
+
+    <section class="subscribe" id="subscribe">
+      <div>
+        <p class="eyebrow">Newsletter</p>
+        <h2>及時收看最新文章</h2>
+        <p>留下 Email，之後有新的文章時可以第一時間通知你。</p>
+      </div>
+      <form class="subscribe-form" data-form>
+        <label>
+          <span>Email</span>
+          <input type="email" placeholder="you@example.com" required />
+        </label>
+        <button class="button primary" type="submit">訂閱</button>
+        <p class="form-message" data-form-message role="status"></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 譯黃大帝</p>
+  </footer>
+
+  <script src={`${import.meta.env.BASE_URL}astro-main.js`}></script>
+</BaseLayout>

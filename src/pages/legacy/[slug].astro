@@ -1,0 +1,35 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export function getStaticPaths() {
+  const legacyPosts = [
+    {
+      slug: "7-6-part1",
+      title: "首爾7天6夜之旅part1",
+      excerpt: "韓國GOGOGO!",
+      url: `${import.meta.env.BASE_URL}articles/7-6-part1.html`,
+    },
+  ];
+
+  return legacyPosts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+---
+
+<BaseLayout title={`${post.title} | Legacy`} description={post.excerpt}>
+  <main class="section">
+    <div class="section-heading">
+      <p class="eyebrow">Legacy</p>
+      <h1>{post.title}</h1>
+    </div>
+    <p>{post.excerpt}</p>
+    <p>
+      這篇是舊版 PDF/HTML 文章，暫時保留原始頁面。
+      <a class="button primary" href={post.url}>開啟舊文章</a>
+    </p>
+  </main>
+</BaseLayout>

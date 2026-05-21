@@ -1,0 +1,46 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { categoryLabel } from "../../data/categories";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={`${post.data.title} | 譯黃大帝`} description={post.data.excerpt}>
+  <main>
+    <article class="article-page">
+      <section class="article-hero">
+        <img src={`${import.meta.env.BASE_URL}${post.data.cover.replace(/^\//, "")}`} alt={post.data.coverAlt ?? post.data.title} />
+        <div class="article-hero-content">
+          <a class="back-link" href={`${import.meta.env.BASE_URL}#stories`}>返回文章列表</a>
+          <p class="eyebrow">{categoryLabel(post.data.category)}</p>
+          <h1>{post.data.title}</h1>
+          <p>{post.data.excerpt}</p>
+        </div>
+      </section>
+
+      <div class="article-layout single-column">
+        <div class="article-body">
+          <Content />
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 譯黃大帝</p>
+    <div>
+      <a href={`${import.meta.env.BASE_URL}#stories`}>文章</a>
+      <a href={`${import.meta.env.BASE_URL}#subscribe`}>訂閱</a>
+    </div>
+  </footer>
+</BaseLayout>
