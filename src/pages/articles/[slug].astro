@@ -5,11 +5,12 @@ import { categoryLabel } from "../../data/categories";
 import Youtube from "../../components/mdx/Youtube.astro";
 import ImageWithCaption from "../../components/mdx/ImageWithCaption.astro";
 import PdfFrame from "../../components/mdx/PdfFrame.astro";
+import { getPostRouteSlug } from "../../utils/postRoute";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts", ({ data }) => !data.draft);
   return posts.map((post) => ({
-    params: { slug: post.data.slug },
+    params: { slug: getPostRouteSlug(post) },
     props: { post },
   }));
 }

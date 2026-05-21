@@ -89,7 +89,7 @@ union DocumentNode = Post | Folder
 
 type Post implements Node & Document {
   title: String!
-  slug: String!
+  slug: String
   date: String!
   category: String!
   excerpt: String!

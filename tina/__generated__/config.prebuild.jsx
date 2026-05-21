@@ -26,9 +26,9 @@ var config_default = defineConfig({
         format: "mdx",
         ui: {
           router: ({ document }) => {
-            const slug = document?.slug || `/articles/${document?._sys?.filename}/`;
-            const articlePath = slug.startsWith("/") ? slug : `/articles/${slug}/`;
-            return `/personal-travel-blog${articlePath}`;
+            const filename = document?._sys?.filename;
+            const routeSlug = filename || String(document?.slug || "").replace(/^\/?articles\//, "").replace(/\/$/, "");
+            return `/personal-travel-blog/articles/${routeSlug}/`;
           }
         },
         fields: [
@@ -42,8 +42,7 @@ var config_default = defineConfig({
           {
             type: "string",
             name: "slug",
-            label: "Slug",
-            required: true
+            label: "Slug"
           },
           {
             type: "datetime",

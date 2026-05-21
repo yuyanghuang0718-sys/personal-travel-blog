@@ -1,10 +1,11 @@
 ---
 import { categoryLabel } from "../data/categories";
+import { getPostRouteSlug } from "../utils/postRoute";
 
 const { post } = Astro.props;
 const { data } = post;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
-const articleUrl = `${baseUrl}articles/${data.slug}/`;
+const articleUrl = `${baseUrl}articles/${getPostRouteSlug(post)}/`;
 const isFeatured = Boolean(Astro.props.featured);
 ---
 
