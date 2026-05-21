@@ -138,6 +138,7 @@ input PostBodyImageWithCaptionFilter {
   src: ImageFilter
   alt: StringFilter
   caption: StringFilter
+  width: StringFilter
 }
 
 input PostBodyFilter {

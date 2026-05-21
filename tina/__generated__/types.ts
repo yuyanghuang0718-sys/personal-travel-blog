@@ -217,6 +217,7 @@ export type PostBodyImageWithCaptionFilter = {
   src?: InputMaybe<ImageFilter>;
   alt?: InputMaybe<StringFilter>;
   caption?: InputMaybe<StringFilter>;
+  width?: InputMaybe<StringFilter>;
 };
 
 export type PostBodyFilter = {
