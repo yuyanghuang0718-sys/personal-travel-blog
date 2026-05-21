@@ -1,0 +1,13 @@
+---
+const { src, title = "" } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+const frameSrc = src?.startsWith("/")
+  ? `${baseUrl}${src.replace(/^\//, "")}`
+  : src;
+---
+
+<iframe
+  class="pdf-article-frame"
+  src={frameSrc}
+  title={title}
+></iframe>

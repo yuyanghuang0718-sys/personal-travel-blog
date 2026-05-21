@@ -7,7 +7,7 @@ const posts = defineCollection({
     title: z.string(),
     slug: z.string(),
     date: z.coerce.date(),
-    category: z.enum(["city-walk", "nature", "food", "overseas"]),
+    category: z.enum(["city-walk", "nature", "food", "overseas", "國外旅遊", "國內旅遊", "翻譯雜談"]),
     excerpt: z.string(),
     cover: z.string(),
     coverAlt: z.string().optional(),

@@ -9,19 +9,6 @@ const posts = (await getCollection("posts"))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
-
-const legacyPosts = [
-  {
-    title: "首爾7天6夜之旅part1",
-    excerpt: "韓國GOGOGO!",
-    category: "city",
-    tag: "國外旅遊",
-    keywords: "首爾7天6夜之旅part1 韓國GOGOGO! 國外旅遊 首爾 韓國 旅行",
-    image: `${baseUrl}assets/uploads/7-6-part1.jpg`,
-    imageAlt: "首爾7天6夜之旅part1",
-    url: `${baseUrl}articles/7-6-part1.html`,
-  },
-];
 ---
 
 <BaseLayout
@@ -62,18 +49,7 @@ const legacyPosts = [
       </div>
 
       <div class="story-grid" data-story-grid>
-        {legacyPosts.map((post) => (
-          <article class="story-card featured" data-category={post.category} data-keywords={post.keywords}>
-            <img src={post.image} alt={post.imageAlt} />
-            <div class="story-content">
-              <span class="tag">{post.tag}</span>
-              <h3>{post.title}</h3>
-              <p>{post.excerpt}</p>
-              <a href={post.url}>閱讀文章</a>
-            </div>
-          </article>
-        ))}
-        {posts.map((post) => <StoryCard post={post} />)}
+        {posts.map((post, index) => <StoryCard post={post} featured={index === 0} />)}
       </div>
       <p class="empty-state" data-empty hidden>找不到符合條件的文章。</p>
     </section>

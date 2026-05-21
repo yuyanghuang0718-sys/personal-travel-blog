@@ -6,9 +6,9 @@ export const categories = [
 ] as const;
 
 export const homepageTabs = [
-  { value: "overseas,city", label: "國外旅遊" },
-  { value: "city-walk,nature", label: "國內旅遊" },
-  { value: "food", label: "翻譯雜談" },
+  { value: "overseas,city,國外旅遊", label: "國外旅遊" },
+  { value: "city-walk,nature,國內旅遊", label: "國內旅遊" },
+  { value: "food,翻譯雜談", label: "翻譯雜談" },
 ];
 
 export type CategoryValue = (typeof categories)[number]["value"];

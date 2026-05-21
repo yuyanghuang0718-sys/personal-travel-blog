@@ -4,6 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { categoryLabel } from "../../data/categories";
 import Youtube from "../../components/mdx/Youtube.astro";
 import ImageWithCaption from "../../components/mdx/ImageWithCaption.astro";
+import PdfFrame from "../../components/mdx/PdfFrame.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts", ({ data }) => !data.draft);
@@ -33,7 +34,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 
       <div class="article-layout single-column">
         <div class="article-body">
-          <Content components={{ Youtube, ImageWithCaption, img: ImageWithCaption }} />
+          <Content components={{ Youtube, ImageWithCaption, PdfFrame, img: ImageWithCaption }} />
         </div>
       </div>
     </article>

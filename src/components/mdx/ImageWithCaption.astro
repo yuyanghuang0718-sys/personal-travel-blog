@@ -4,7 +4,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const imageSrc = src?.startsWith("/")
   ? `${baseUrl}${src.replace(/^\//, "")}`
   : src;
-const displayCaption = caption || title;
+const displayCaption = String(caption || title).trim();
 ---
 
 <figure class="article-photo">

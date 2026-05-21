@@ -26,7 +26,10 @@ export default defineConfig({
         path: "content/posts",
         format: "mdx",
         ui: {
-          router: ({ document }) => `/articles/${document._sys.filename}/`,
+          router: ({ document }) => {
+            const slug = document?.slug || document?._sys?.filename;
+            return `/personal-travel-blog/articles/${slug}/`;
+          },
         },
         fields: [
           {
@@ -58,6 +61,9 @@ export default defineConfig({
               { value: "nature", label: "自然風景" },
               { value: "food", label: "美食餐桌" },
               { value: "overseas", label: "國外旅遊" },
+              { value: "國外旅遊", label: "國外旅遊" },
+              { value: "國內旅遊", label: "國內旅遊" },
+              { value: "翻譯雜談", label: "翻譯雜談" },
             ],
           },
           {
