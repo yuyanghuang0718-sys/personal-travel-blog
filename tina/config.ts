@@ -27,8 +27,9 @@ export default defineConfig({
         format: "mdx",
         ui: {
           router: ({ document }) => {
-            const slug = document?.slug || document?._sys?.filename;
-            return `/personal-travel-blog/articles/${slug}/`;
+            const slug = document?.slug || `/articles/${document?._sys?.filename}/`;
+            const articlePath = slug.startsWith("/") ? slug : `/articles/${slug}/`;
+            return `/personal-travel-blog${articlePath}`;
           },
         },
         fields: [
