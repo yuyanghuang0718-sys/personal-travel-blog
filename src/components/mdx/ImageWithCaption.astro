@@ -1,7 +1,8 @@
 ---
 const { src, alt = "", caption = "" } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const imageSrc = src?.startsWith("/")
-  ? `${import.meta.env.BASE_URL}${src.replace(/^\//, "")}`
+  ? `${baseUrl}${src.replace(/^\//, "")}`
   : src;
 ---
 
