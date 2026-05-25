@@ -15,6 +15,13 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
     <meta name="description" content={description} />
     <link rel="preconnect" href="https://images.unsplash.com" />
     <link rel="stylesheet" href={`${baseUrl}styles.css`} />
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YS5EPHZGXY"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag("js", new Date());
+      gtag("config", "G-YS5EPHZGXY");
+    </script>
   </head>
   <body>
     <slot />
