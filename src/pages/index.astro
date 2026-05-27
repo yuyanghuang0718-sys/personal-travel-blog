@@ -2,35 +2,211 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import StoryCard from "../components/StoryCard.astro";
-import { homepageTabs } from "../data/categories";
-
-const posts = (await getCollection("posts"))
-  .filter((post) => !post.data.draft)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+import { getPostRouteSlug } from "../utils/postRoute";
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+
+const categoryTabs = [
+  { value: "all", label: "全部" },
+  { value: "korea", label: "韓國旅遊" },
+  { value: "russia", label: "俄羅斯旅遊" },
+  { value: "translation", label: "翻譯雜談" },
+  { value: "interpreting", label: "口譯日常" },
+];
+
+const categoryCards = [
+  { category: "korea", label: "韓國旅遊", icon: "塔", image: "/assets/uploads/20260514_105949.jpg" },
+  { category: "russia", label: "俄羅斯旅遊", icon: "城", image: "/assets/blog-cover.png" },
+  { category: "translation", label: "翻譯雜談", icon: "文", image: "/assets/uploads/20260513_223608.jpg" },
+  { category: "interpreting", label: "口譯日常", icon: "譯", image: "/assets/uploads/20260516_223350.jpg" },
+];
+
+const placeholderStories = [
+  {
+    category: "russia",
+    categoryLabel: "俄羅斯旅遊",
+    title: "莫斯科紅場散步記",
+    excerpt: "從聖瓦西里主教座堂到紅場石板路，記錄初見莫斯科的震撼與冬日城市光影。",
+    dateIso: "2024-11-15",
+    dateLabel: "2024-11-15",
+    cover: "/assets/blog-cover.png",
+  },
+  {
+    category: "russia",
+    categoryLabel: "俄羅斯旅遊",
+    title: "西伯利亞鐵路初體驗",
+    excerpt: "窗外景色一路延展，火車上的時間感、旅人故事與長途移動的浪漫。",
+    dateIso: "2024-10-28",
+    dateLabel: "2024-10-28",
+    cover: "/assets/uploads/20260516_223926.jpg",
+  },
+  {
+    category: "russia",
+    categoryLabel: "俄羅斯旅遊",
+    title: "葉卡捷琳堡城市印象",
+    excerpt: "歐亞交界上的城市日常，從街角建築、咖啡館到歷史記憶的短篇觀察。",
+    dateIso: "2024-10-08",
+    dateLabel: "2024-10-08",
+    cover: "/assets/uploads/20260516_223930.jpg",
+  },
+  {
+    category: "translation",
+    categoryLabel: "翻譯雜談",
+    title: "翻譯工作的挑戰與樂趣",
+    excerpt: "那些字典查不到的語氣、文化差異與現場判斷，是翻譯最迷人的地方。",
+    dateIso: "2024-09-22",
+    dateLabel: "2024-09-22",
+    cover: "/assets/uploads/20260513_223608.jpg",
+  },
+  {
+    category: "translation",
+    categoryLabel: "翻譯雜談",
+    title: "法律口譯的一天",
+    excerpt: "從事前準備到現場應對，整理法律口譯工作中需要保持清楚與精準的細節。",
+    dateIso: "2024-09-05",
+    dateLabel: "2024-09-05",
+    cover: "/assets/uploads/20260516_223350.jpg",
+  },
+  {
+    category: "translation",
+    categoryLabel: "翻譯雜談",
+    title: "翻譯與文化差異",
+    excerpt: "同一句話在不同語境下可能完全不同，翻譯也是理解文化的過程。",
+    dateIso: "2024-08-18",
+    dateLabel: "2024-08-18",
+    cover: "/assets/uploads/20260514_002020.jpg",
+  },
+  {
+    category: "interpreting",
+    categoryLabel: "口譯日常",
+    title: "第一次法院口譯經驗",
+    excerpt: "第一次站上法庭口譯位置時，如何管理緊張、保持中立並準確傳達。",
+    dateIso: "2024-08-01",
+    dateLabel: "2024-08-01",
+    cover: "/assets/uploads/20260516_223937.jpg",
+  },
+  {
+    category: "interpreting",
+    categoryLabel: "口譯日常",
+    title: "醫療口譯準備流程",
+    excerpt: "醫療場域需要速度也需要同理心，這是一份從詞彙到情境的準備筆記。",
+    dateIso: "2024-07-16",
+    dateLabel: "2024-07-16",
+    cover: "/assets/uploads/20260514_111329.jpg",
+  },
+  {
+    category: "interpreting",
+    categoryLabel: "口譯日常",
+    title: "如何準備同步口譯",
+    excerpt: "主題研究、術語表、聽力暖身與筆記方法，建立上場前的穩定節奏。",
+    dateIso: "2024-06-30",
+    dateLabel: "2024-06-30",
+    cover: "/assets/uploads/20260519_000946.jpg",
+  },
+];
+
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("zh-TW", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  })
+    .format(date)
+    .replace(/\//g, "-");
+
+const classifyPost = (value: string) => {
+  if (["overseas", "國外旅遊"].includes(value)) return { category: "korea", label: "韓國旅遊" };
+  if (["food", "翻譯雜談"].includes(value)) return { category: "translation", label: "翻譯雜談" };
+  return { category: "korea", label: "韓國旅遊" };
+};
+
+const realStories = (await getCollection("posts"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .map((post) => {
+    const category = classifyPost(post.data.category);
+
+    return {
+      category: category.category,
+      categoryLabel: category.label,
+      title: post.data.title,
+      excerpt: post.data.excerpt,
+      dateIso: post.data.date.toISOString(),
+      dateLabel: formatDate(post.data.date),
+      cover: post.data.cover,
+      coverAlt: post.data.coverAlt ?? post.data.title,
+      href: `${baseUrl}articles/${getPostRouteSlug(post)}/`,
+      placeholder: false,
+    };
+  });
+
+const realCategorySet = new Set(realStories.map((story) => story.category));
+const stories = [
+  ...realStories,
+  ...placeholderStories
+    .filter((story) => !realCategorySet.has(story.category))
+    .map((story) => ({ ...story, href: "#coming-soon", placeholder: true })),
+];
+
+const aboutTags = ["翻譯／口譯工作者", "旅遊愛好者", "中・英・俄使用者", "持續探索世界中"];
 ---
 
 <BaseLayout
   title="譯黃大帝 | 旅遊 × 翻譯"
-  description="譯黃大帝，整理旅遊與翻譯文章。"
+  description="譯黃大帝，記錄旅行、文化觀察與翻譯口譯工作中的體悟。"
 >
-  <main id="top">
-    <section class="hero">
-      <img
-        class="hero-image"
-        src={`${baseUrl}assets/blog-cover.png`}
-        alt="旅遊地圖與照片拼貼"
-      />
-      <div class="hero-overlay"></div>
-      <div class="hero-content">
-        <h1>譯黃大帝<br />旅遊 × 翻譯</h1>
-        <p class="hero-copy">譯起環遊世界</p>
+  <main id="top" class="home-shell">
+    <header class="home-header" data-header>
+      <a class="home-brand" href={`${baseUrl}`}>
+        <span>Y</span>
+        <strong>譯黃大帝</strong>
+      </a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-label="開啟選單" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="home-nav" data-nav>
+        <a href="#top">首頁</a>
+        <a href="#stories">旅行日記</a>
+        <a href="#categories">翻譯雜談</a>
+        <a href="#about">關於我</a>
+        <a class="search-link" href="#stories" aria-label="搜尋文章">⌕</a>
+      </nav>
+    </header>
+
+    <section class="home-hero">
+      <div class="hero-copy-block">
+        <p class="eyebrow">Travel Notes / Translation Journal</p>
+        <h1>譯黃大帝</h1>
+        <p class="hero-subtitle">旅遊 × 翻譯 × 譯遊未盡</p>
+        <p class="hero-intro">
+          記錄旅行中的美好、文化的衝擊，以及翻譯工作中的點滴與體悟。
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#stories">開始閱讀</a>
+          <a class="button ghost" href="#about">關於我</a>
+        </div>
+      </div>
+
+      <div class="hero-map" aria-label="旅行地圖視覺">
+        <img src={`${baseUrl}assets/blog-cover.png`} alt="世界地圖與旅行照片視覺" />
+        <div class="travel-note note-russia">
+          <img src={`${baseUrl}assets/uploads/20260514_105949.jpg`} alt="旅行照片" />
+          <span>Привет!<br />你好！</span>
+        </div>
+        <div class="travel-note note-korea">
+          <img src={`${baseUrl}assets/uploads/20260514_111012.jpg`} alt="韓國旅行照片" />
+          <span>안녕하세요!<br />韓國你好！</span>
+        </div>
+        <div class="travel-note note-taiwan">
+          <img src={`${baseUrl}assets/uploads/20260514_002020.jpg`} alt="台灣旅行照片" />
+          <span>台灣<br />哩賀！</span>
+        </div>
       </div>
     </section>
 
-    <section class="section stories-section" id="stories">
-      <div class="section-heading">
+    <section class="home-section stories-section" id="stories">
+      <div class="center-heading">
         <p class="eyebrow">Latest Stories</p>
         <h2>最新文章</h2>
       </div>
@@ -38,46 +214,86 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
       <div class="filter-bar" aria-label="文章篩選">
         <label class="search-field">
           <span>搜尋文章</span>
-          <input type="search" data-search />
+          <input type="search" data-search placeholder="輸入關鍵字" />
         </label>
         <div class="category-tabs" role="tablist" aria-label="文章分類">
-          <button class="tab active" type="button" data-filter="all">全部</button>
-          {homepageTabs.map((category) => (
-            <button class="tab" type="button" data-filter={category.value}>{category.label}</button>
+          {categoryTabs.map((category, index) => (
+            <button class:list={["tab", { active: index === 0 }]} type="button" data-filter={category.value}>
+              {category.label}
+            </button>
           ))}
         </div>
       </div>
 
       <div class="story-grid" data-story-grid>
-        {posts.map((post) => <StoryCard post={post} />)}
+        {stories.map((story) => <StoryCard story={story} />)}
       </div>
       <p class="empty-state" data-empty hidden>找不到符合條件的文章。</p>
+      <p id="coming-soon" class="coming-soon">Coming Soon 文章為首頁示範卡片，未來新增真文章後會自動取代。</p>
     </section>
 
-    <section class="subscribe" id="subscribe">
-      <div>
-        <p class="eyebrow">Newsletter</p>
-        <h2>及時收看最新文章</h2>
-        <p>留下 Email，之後有新的文章時可以第一時間通知你。</p>
+    <section class="home-section about-section" id="about">
+      <div class="about-photo">
+        <img src={`${baseUrl}assets/blog-cover.png`} alt="譯黃大帝旅行照片" />
       </div>
-      <form
-        class="subscribe-form"
-        action="https://buttondown.com/api/emails/embed-subscribe/YOUR_BUTTONDOWN_USERNAME"
-        method="post"
-      >
-        <label>
-          <span>Email</span>
-          <input type="email" name="email" placeholder="you@example.com" required />
-        </label>
-        <input type="hidden" name="embed" value="1" />
-        <button class="button primary" type="submit">訂閱</button>
-      </form>
+      <div class="about-copy">
+        <p class="eyebrow">About</p>
+        <h2>關於譯黃大帝</h2>
+        <p>
+          嗨，我是黃宇揚，一名翻譯與口譯工作者，也是一位熱愛旅行的人。
+        </p>
+        <p>
+          從語言到文化，從城市到風景，我喜歡用文字記錄旅途中的所見所聞，也分享翻譯工作中的經驗與想法。
+        </p>
+        <a class="button primary" href="#about">了解更多關於我</a>
+      </div>
+      <div class="about-tags">
+        {aboutTags.map((tag) => <span>{tag}</span>)}
+      </div>
     </section>
-  </main>
 
-  <footer class="site-footer">
-    <p>© 2026 譯黃大帝</p>
-  </footer>
+    <section class="home-section categories-section" id="categories">
+      <div class="center-heading">
+        <p class="eyebrow">Topics</p>
+        <h2>熱門分類</h2>
+      </div>
+      <div class="category-card-grid">
+        {categoryCards.map((category) => (
+          <a class="category-card" href="#stories" data-category-filter={category.category}>
+            <img src={`${baseUrl}${category.image.replace(/^\//, "")}`} alt={category.label} />
+            <span class="category-icon">{category.icon}</span>
+            <strong>{category.label}</strong>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <footer class="home-footer">
+      <div>
+        <a class="footer-brand" href={`${baseUrl}`}>
+          <span>Y</span>
+          <strong>譯黃大帝</strong>
+        </a>
+        <p>譯遊未盡，持續探索世界，用翻譯連結更多美好。</p>
+      </div>
+      <nav>
+        <h3>網站導覽</h3>
+        <a href="#top">首頁</a>
+        <a href="#stories">旅行日記</a>
+        <a href="#categories">翻譯雜談</a>
+        <a href="#about">關於我</a>
+      </nav>
+      <div>
+        <h3>聯絡方式</h3>
+        <p>hello@yuyangtranslator.com</p>
+        <div class="social-links" aria-label="社群連結">
+          <a href="#" aria-label="Instagram">◎</a>
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="mailto:hello@yuyangtranslator.com" aria-label="Email">✉</a>
+        </div>
+      </div>
+    </footer>
+  </main>
 
   <script src={`${baseUrl}astro-main.js`}></script>
 </BaseLayout>
