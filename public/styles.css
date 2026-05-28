@@ -1973,15 +1973,10 @@ body:has(.home-shell) {
   color: #7a8797;
 }
 
-.empty-state,
-.coming-soon {
+.empty-state {
   color: #64748b;
   line-height: 1.8;
   text-align: center;
-}
-
-.coming-soon {
-  margin: 28px 0 0;
 }
 
 .about-section {
