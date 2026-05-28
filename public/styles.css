@@ -1641,6 +1641,23 @@ body:has(.home-shell) {
   color: #975e48;
 }
 
+.home-nav a[aria-current="page"] {
+  color: #975e48;
+}
+
+.nav-toggle {
+  display: none;
+}
+
+.nav-toggle span {
+  background: #253141;
+  border-radius: 99px;
+  display: block;
+  height: 2px;
+  margin: 6px auto;
+  width: 22px;
+}
+
 .home-hero {
   align-items: center;
   aspect-ratio: 16 / 9;
@@ -1974,6 +1991,11 @@ body:has(.home-shell) {
   grid-template-columns: 0.9fr 1.2fr 0.8fr;
 }
 
+.about-simple-section {
+  gap: clamp(28px, 6vw, 68px);
+  grid-template-columns: minmax(260px, 0.78fr) minmax(0, 1.22fr);
+}
+
 .about-photo img {
   aspect-ratio: 4 / 5;
   border-radius: 14px;
@@ -1988,6 +2010,14 @@ body:has(.home-shell) {
   font-size: 1.06rem;
   line-height: 2;
   margin: 20px 0 24px;
+}
+
+.about-simple-section .about-copy {
+  max-width: 660px;
+}
+
+.about-simple-section .about-copy p {
+  margin: 16px 0;
 }
 
 .about-tags {
@@ -2098,6 +2128,242 @@ body:has(.home-shell) {
   width: 36px;
 }
 
+.about-page,
+.contact-page {
+  overflow: hidden;
+}
+
+.about-page-hero,
+.contact-hero {
+  background:
+    linear-gradient(90deg, rgba(255, 250, 244, 0.96), rgba(255, 250, 244, 0.78)),
+    url("/personal-travel-blog/assets/blog-cover.png") center / cover;
+  display: grid;
+  gap: 38px;
+  padding: 70px 46px;
+}
+
+.about-page-hero {
+  align-items: center;
+  grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.55fr);
+}
+
+.about-page-hero h1,
+.contact-hero h1,
+.about-page-section h2,
+.about-cta h2 {
+  color: #202936;
+  font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
+  letter-spacing: 0;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.about-page-hero h1,
+.contact-hero h1 {
+  font-size: clamp(2.6rem, 6vw, 4.7rem);
+}
+
+.about-page-hero p,
+.contact-hero p {
+  color: #475569;
+  font-size: 1.08rem;
+  line-height: 1.9;
+  margin: 18px 0 0;
+  max-width: 640px;
+}
+
+.about-page-hero img {
+  aspect-ratio: 4 / 5;
+  border-radius: 18px;
+  box-shadow: 0 22px 54px rgba(55, 45, 37, 0.18);
+  height: auto;
+  object-fit: cover;
+  object-position: center top;
+  width: 100%;
+}
+
+.about-page-section {
+  border-bottom: 1px solid rgba(92, 73, 58, 0.12);
+  padding: 64px 46px;
+}
+
+.section-heading {
+  margin-bottom: 28px;
+  max-width: 760px;
+}
+
+.section-heading h2,
+.about-cta h2 {
+  font-size: clamp(2rem, 4vw, 2.85rem);
+}
+
+.section-heading > p:not(.eyebrow) {
+  color: #5d6878;
+  line-height: 1.9;
+  margin: 16px 0 0;
+}
+
+.about-rich-text {
+  color: #364355;
+  font-size: 1.13rem;
+  line-height: 2.05;
+  max-width: 820px;
+}
+
+.about-rich-text p {
+  margin: 0 0 1.6em;
+}
+
+.timeline-list {
+  display: grid;
+  gap: 0;
+  max-width: 800px;
+}
+
+.timeline-item {
+  border-left: 2px solid rgba(151, 94, 72, 0.28);
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 150px 1fr;
+  padding: 4px 0 30px 28px;
+  position: relative;
+}
+
+.timeline-item::before {
+  background: #975e48;
+  border: 4px solid #fffaf4;
+  border-radius: 999px;
+  content: "";
+  height: 14px;
+  left: -8px;
+  position: absolute;
+  top: 8px;
+  width: 14px;
+}
+
+.timeline-item time {
+  color: #975e48;
+  font-weight: 900;
+}
+
+.timeline-item p {
+  color: #253141;
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.document-grid,
+.experience-grid {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.single-document-grid {
+  grid-template-columns: minmax(260px, 420px);
+}
+
+.document-group {
+  margin-top: 34px;
+}
+
+.document-group > h3 {
+  color: #253141;
+  font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
+  font-size: 1.35rem;
+  margin: 0 0 18px;
+}
+
+.document-card,
+.experience-card {
+  background: #fff;
+  border: 1px solid rgba(92, 73, 58, 0.12);
+  border-radius: 14px;
+  box-shadow: 0 14px 34px rgba(55, 45, 37, 0.08);
+}
+
+.document-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.document-card img {
+  background: #f6efe6;
+  height: 250px;
+  object-fit: contain;
+  padding: 14px;
+  width: 100%;
+}
+
+.document-card > div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+}
+
+.document-card h3,
+.document-card h4,
+.experience-card h3 {
+  color: #202936;
+  font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
+  font-size: 1.15rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.document-link {
+  align-self: flex-start;
+  border: 1px solid rgba(151, 94, 72, 0.26);
+  border-radius: 999px;
+  color: #975e48;
+  font-weight: 900;
+  margin-top: auto;
+  padding: 9px 16px;
+}
+
+.document-link:hover {
+  background: #975e48;
+  color: #fffaf4;
+}
+
+.experience-card {
+  padding: 24px;
+}
+
+.experience-card p {
+  color: #5d6878;
+  line-height: 1.85;
+  margin: 12px 0 0;
+}
+
+.about-cta,
+.contact-hero {
+  padding: 72px 46px;
+}
+
+.about-cta {
+  background: #f6efe6;
+  text-align: center;
+}
+
+.about-cta p {
+  color: #475569;
+  font-size: 1.08rem;
+  line-height: 1.8;
+  margin: 18px auto 26px;
+}
+
+.contact-hero {
+  min-height: 520px;
+  place-content: center;
+}
+
 @media (max-width: 1100px) {
   .story-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2178,6 +2444,30 @@ body:has(.home-shell) {
     padding-top: 24px;
   }
 
+  .about-simple-section {
+    grid-template-columns: 1fr;
+  }
+
+  .about-page-hero,
+  .document-grid,
+  .experience-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-page-hero,
+  .about-page-section,
+  .about-cta,
+  .contact-hero {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .about-page-hero img,
+  .about-photo img {
+    max-height: 520px;
+    object-position: center top;
+  }
+
   .home-footer {
     grid-template-columns: 1fr;
     padding-left: 22px;
@@ -2227,5 +2517,24 @@ body:has(.home-shell) {
 
   .tab {
     flex: 1 1 auto;
+  }
+
+  .about-page-hero {
+    padding-top: 44px;
+  }
+
+  .about-page-hero h1,
+  .contact-hero h1 {
+    font-size: clamp(2.35rem, 12vw, 3.35rem);
+  }
+
+  .timeline-item {
+    gap: 8px;
+    grid-template-columns: 1fr;
+    padding-left: 24px;
+  }
+
+  .document-card img {
+    height: 220px;
   }
 }

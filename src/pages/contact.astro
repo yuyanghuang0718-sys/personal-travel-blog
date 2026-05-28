@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+---
+
+<BaseLayout
+  title="聯絡方式 | 譯黃大帝"
+  description="歡迎口筆譯、旅遊內容與跨文化合作邀約。"
+>
+  <main class="home-shell contact-page" id="top">
+    <header class="home-header">
+      <a class="home-brand" href={baseUrl} aria-label="譯黃大帝首頁">
+        <span>Y</span>
+        <strong>譯黃大帝</strong>
+      </a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="開啟導覽列">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="home-nav" data-nav aria-label="主導覽">
+        <a href={baseUrl}>首頁</a>
+        <a href={`${baseUrl}#stories`}>旅行日記</a>
+        <a href={`${baseUrl}#categories`}>翻譯雜談</a>
+        <a href={`${baseUrl}about/`}>關於我</a>
+        <a href={`${baseUrl}contact/`} aria-current="page">聯絡方式</a>
+      </nav>
+    </header>
+
+    <section class="contact-hero">
+      <p class="eyebrow">Contact</p>
+      <h1>聯絡方式</h1>
+      <p>
+        歡迎口筆譯、旅遊內容與跨文化合作邀約。若有合作需求，可以透過 Email 與我聯繫。
+      </p>
+      <a class="button primary" href="mailto:hello@yuyangtranslator.com">hello@yuyangtranslator.com</a>
+    </section>
+  </main>
+
+  <script src={`${baseUrl}astro-main.js`}></script>
+</BaseLayout>

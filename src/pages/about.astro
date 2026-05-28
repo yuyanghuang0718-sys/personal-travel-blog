@@ -1,0 +1,212 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+const assetBase = `${baseUrl}assets/uploads/about/`;
+
+const languageCertificates = [
+  {
+    title: "俄語檢定 B2",
+    image: `${assetBase}certificate-russian-b2.jpg`,
+  },
+  {
+    title: "TOEIC 金色證書（905 分）",
+    image: `${assetBase}certificate-toeic-2022.jpg`,
+  },
+  {
+    title: "韓文檢定 TOPIK 二級",
+    image: `${assetBase}certificate-topik-2.png`,
+  },
+];
+
+const professionalDocuments = [
+  {
+    title: "俄語導遊執照",
+    image: `${assetBase}license-russian-tour-guide.jpg`,
+    group: "專業證照",
+  },
+  {
+    title: "台中地方法院｜特約通譯",
+    image: `${assetBase}appointment-taichung-court-interpreter.jpg`,
+    group: "司法／行政通譯聘任",
+  },
+  {
+    title: "台中地方檢察署｜特約通譯",
+    image: `${assetBase}appointment-taichung-prosecutor-interpreter.jpg`,
+    group: "司法／行政通譯聘任",
+  },
+  {
+    title: "台北市政府警察局｜特約通譯",
+    image: `${assetBase}appointment-taipei-police-interpreter.jpg`,
+    group: "司法／行政通譯聘任",
+  },
+];
+
+const educationTimeline = [
+  { year: "2018–2022", label: "政治大學｜斯拉夫語文學系" },
+  { year: "2021–2022", label: "北京外國語大學｜交換學生" },
+  { year: "2022", label: "俄羅斯 烏拉爾聯邦大學｜交換學生" },
+  { year: "2024–至今", label: "東吳大學｜翻譯碩士班" },
+];
+
+const experienceItems = [
+  {
+    title: "法律與司法通譯",
+    text: "曾參與法院、警政與調解程序相關通譯工作",
+  },
+  {
+    title: "口譯經驗",
+    text: "包含法律、商務、醫療、觀光與跨文化情境",
+  },
+  {
+    title: "筆譯經驗",
+    text: "包含字幕、新聞、商務文件與跨文化內容",
+  },
+];
+---
+
+<BaseLayout
+  title="關於黃宇揚｜譯黃大帝"
+  description="黃宇揚的翻譯、口譯、語言學習與旅行記錄，呈現專業可信度與個人品牌故事。"
+>
+  <main class="home-shell about-page" id="top">
+    <header class="home-header">
+      <a class="home-brand" href={baseUrl} aria-label="譯黃大帝首頁">
+        <span>Y</span>
+        <strong>譯黃大帝</strong>
+      </a>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="開啟導覽列">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="home-nav" data-nav aria-label="主導覽">
+        <a href={baseUrl}>首頁</a>
+        <a href={`${baseUrl}#stories`}>旅行日記</a>
+        <a href={`${baseUrl}#categories`}>翻譯雜談</a>
+        <a href={`${baseUrl}about/`} aria-current="page">關於我</a>
+        <a href={`${baseUrl}contact/`}>聯絡方式</a>
+      </nav>
+    </header>
+
+    <section class="about-page-hero">
+      <div>
+        <p class="eyebrow">About</p>
+        <h1>關於黃宇揚｜譯黃大帝</h1>
+        <p>
+          旅遊 × 翻譯的個人品牌部落格，記錄語言、文化、口筆譯工作與旅行中的觀察。
+        </p>
+      </div>
+      <img src={`${assetBase}about-profile.png`} alt="黃宇揚口譯活動照片" />
+    </section>
+
+    <section class="about-page-section about-intro-section">
+      <div class="section-heading">
+        <p class="eyebrow">Profile</p>
+        <h2>我是誰</h2>
+      </div>
+      <div class="about-rich-text">
+        <p>嗨，我是黃宇揚，一名熱愛翻譯與旅行的譯者<br />對我而言，語言不只是溝通工具，更是理解文化與世界的入口<br />透過語言，我得以接觸不同文化、看見不同的思考方式，也因此更加著迷於跨文化交流與世界各地的故事</p>
+        <p>我相信，翻譯與旅行其實有許多相似之處——都需要理解不同背景、學會站在另一個角度思考，也都讓人重新認識世界</p>
+        <p>工作與學習之外，我也喜歡下西洋棋、追劇、聽音樂，以及探索各種新事物<br />對我來說，不論是旅行、棋盤上的策略思考，還是不同語言之間的轉換，都是理解世界的另一種方式</p>
+      </div>
+    </section>
+
+    <section class="about-page-section">
+      <div class="section-heading">
+        <p class="eyebrow">Journey</p>
+        <h2>學歷與跨文化經歷</h2>
+      </div>
+      <div class="timeline-list">
+        {educationTimeline.map((item) => (
+          <div class="timeline-item">
+            <time>{item.year}</time>
+            <p>{item.label}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="about-page-section">
+      <div class="section-heading">
+        <p class="eyebrow">Language</p>
+        <h2>語言能力與檢定</h2>
+      </div>
+      <div class="document-grid">
+        {languageCertificates.map((item) => (
+          <article class="document-card">
+            <img src={item.image} alt={item.title} loading="lazy" />
+            <div>
+              <h3>{item.title}</h3>
+              <a class="document-link" href={item.image} target="_blank" rel="noopener">查看文件</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="about-page-section">
+      <div class="section-heading">
+        <p class="eyebrow">Documents</p>
+        <h2>專業證照與聘書</h2>
+        <p>
+          以下資料可作為通譯實務經驗參考<br />基於個資與案件保密，部分資訊將進行遮蔽處理
+        </p>
+      </div>
+
+      <div class="document-group">
+        <h3>A. 專業證照</h3>
+        <div class="document-grid single-document-grid">
+          {professionalDocuments.filter((item) => item.group === "專業證照").map((item) => (
+            <article class="document-card">
+              <img src={item.image} alt={item.title} loading="lazy" />
+              <div>
+                <h4>{item.title}</h4>
+                <a class="document-link" href={item.image} target="_blank" rel="noopener">查看文件</a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div class="document-group">
+        <h3>B. 司法／行政通譯聘任</h3>
+        <div class="document-grid">
+          {professionalDocuments.filter((item) => item.group === "司法／行政通譯聘任").map((item) => (
+            <article class="document-card">
+              <img src={item.image} alt={item.title} loading="lazy" />
+              <div>
+                <h4>{item.title}</h4>
+                <a class="document-link" href={item.image} target="_blank" rel="noopener">查看文件</a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="about-page-section">
+      <div class="section-heading">
+        <p class="eyebrow">Work</p>
+        <h2>翻譯與口譯經驗</h2>
+      </div>
+      <div class="experience-grid">
+        {experienceItems.map((item) => (
+          <article class="experience-card">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="about-cta">
+      <p class="eyebrow">Collaboration</p>
+      <h2>合作邀約</h2>
+      <p>歡迎口筆譯合作邀約</p>
+      <a class="button primary" href={`${baseUrl}contact/`}>聯絡我</a>
+    </section>
+  </main>
+
+  <script src={`${baseUrl}astro-main.js`}></script>
+</BaseLayout>
