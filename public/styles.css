@@ -2163,6 +2163,14 @@ body:has(.home-shell) {
   font-size: clamp(2.6rem, 6vw, 4.7rem);
 }
 
+.about-page-hero h1 {
+  font-size: clamp(48px, 5vw, 88px);
+  line-height: 1.1;
+  max-width: 720px;
+  white-space: normal;
+  word-break: keep-all;
+}
+
 .about-page-hero p,
 .contact-hero p {
   color: #475569;
@@ -2170,6 +2178,16 @@ body:has(.home-shell) {
   line-height: 1.9;
   margin: 18px 0 0;
   max-width: 640px;
+}
+
+.about-page-hero .about-hero-subtitle {
+  color: #975e48;
+  font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
+  font-size: clamp(1.05rem, 1.8vw, 1.45rem);
+  font-weight: 700;
+  line-height: 1.45;
+  margin-top: 14px;
+  word-break: keep-all;
 }
 
 .about-page-hero img {
