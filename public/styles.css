@@ -2279,19 +2279,18 @@ body:has(.home-shell) {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.single-document-grid {
-  grid-template-columns: minmax(260px, 420px);
+.document-section-heading {
+  display: block;
+  max-width: 780px;
 }
 
-.document-group {
-  margin-top: 34px;
+.document-section-heading > p:not(.eyebrow) {
+  max-width: 640px;
 }
 
-.document-group > h3 {
-  color: #253141;
-  font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
-  font-size: 1.35rem;
-  margin: 0 0 18px;
+.professional-documents-grid {
+  align-items: stretch;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .document-card,
@@ -2308,6 +2307,10 @@ body:has(.home-shell) {
   overflow: hidden;
 }
 
+.professional-document-card {
+  height: 100%;
+}
+
 .document-card img {
   background: #f6efe6;
   height: 250px;
@@ -2316,12 +2319,20 @@ body:has(.home-shell) {
   width: 100%;
 }
 
+.professional-document-card img {
+  height: 280px;
+}
+
 .document-card > div {
   display: flex;
   flex: 1;
   flex-direction: column;
   gap: 14px;
   padding: 18px;
+}
+
+.professional-document-card > div {
+  min-height: 132px;
 }
 
 .document-card h3,
@@ -2471,6 +2482,10 @@ body:has(.home-shell) {
     grid-template-columns: 1fr;
   }
 
+  .professional-documents-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .about-page-hero,
   .about-page-section,
   .about-cta,
@@ -2553,5 +2568,9 @@ body:has(.home-shell) {
 
   .document-card img {
     height: 220px;
+  }
+
+  .professional-documents-grid {
+    grid-template-columns: 1fr;
   }
 }

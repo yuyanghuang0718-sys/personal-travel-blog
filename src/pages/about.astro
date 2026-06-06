@@ -23,22 +23,18 @@ const professionalDocuments = [
   {
     title: "俄語導遊執照",
     image: `${assetBase}license-russian-tour-guide.jpg`,
-    group: "專業證照",
   },
   {
-    title: "台中地方法院｜特約通譯",
+    title: "台中地方法院特約通譯",
     image: `${assetBase}appointment-taichung-court-interpreter.jpg`,
-    group: "司法／行政通譯聘任",
   },
   {
-    title: "台中地方檢察署｜特約通譯",
+    title: "台中地方檢察署特約通譯",
     image: `${assetBase}appointment-taichung-prosecutor-interpreter.jpg`,
-    group: "司法／行政通譯聘任",
   },
   {
-    title: "台北市政府警察局｜特約通譯",
+    title: "台北市政府警察局特約通譯",
     image: `${assetBase}appointment-taipei-police-interpreter.jpg`,
-    group: "司法／行政通譯聘任",
   },
 ];
 
@@ -147,39 +143,22 @@ const experienceItems = [
     </section>
 
     <section class="about-page-section">
-      <div class="section-heading">
+      <div class="section-heading document-section-heading">
         <p class="eyebrow">Documents</p>
         <h2>專業證照與聘書</h2>
+        <p>以下為相關專業資格與聘任文件。<br />基於個資與案件保密需求，部分資訊已進行適當遮蔽。</p>
       </div>
 
-      <div class="document-group">
-        <h3>A. 專業證照</h3>
-        <div class="document-grid single-document-grid">
-          {professionalDocuments.filter((item) => item.group === "專業證照").map((item) => (
-            <article class="document-card">
-              <img src={item.image} alt={item.title} loading="lazy" />
-              <div>
-                <h4>{item.title}</h4>
-                <a class="document-link" href={item.image} target="_blank" rel="noopener">查看文件</a>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-
-      <div class="document-group">
-        <h3>B. 司法／行政通譯聘任</h3>
-        <div class="document-grid">
-          {professionalDocuments.filter((item) => item.group === "司法／行政通譯聘任").map((item) => (
-            <article class="document-card">
-              <img src={item.image} alt={item.title} loading="lazy" />
-              <div>
-                <h4>{item.title}</h4>
-                <a class="document-link" href={item.image} target="_blank" rel="noopener">查看文件</a>
-              </div>
-            </article>
-          ))}
-        </div>
+      <div class="document-grid professional-documents-grid">
+        {professionalDocuments.map((item) => (
+          <article class="document-card professional-document-card">
+            <img src={item.image} alt={item.title} loading="lazy" />
+            <div>
+              <h3>{item.title}</h3>
+              <a class="document-link" href={item.image} target="_blank" rel="noopener">查看文件</a>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
 
