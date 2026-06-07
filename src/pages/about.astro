@@ -66,29 +66,28 @@ const experienceItems = [
   description="黃宇揚的翻譯、口譯、語言學習與旅行記錄，呈現專業可信度與個人品牌故事。"
 >
   <main class="home-shell about-page" id="top">
-    <header class="home-header home-header--nav-only">
+    <header class="home-header">
+      <a class="home-brand" href={baseUrl} aria-label="譯黃大帝首頁">
+        <span>Y</span>
+        <strong>譯黃大帝</strong>
+      </a>
       <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="開啟導覽列">
         <span></span>
         <span></span>
         <span></span>
       </button>
       <nav class="home-nav" data-nav aria-label="主導覽">
-        <a href={baseUrl}>首頁</a>
-        <a href={`${baseUrl}#stories`}>旅行日記</a>
-        <a href={`${baseUrl}#categories`}>翻譯雜談</a>
-        <a href={`${baseUrl}about/`} aria-current="page">關於我</a>
+        <a href={`${baseUrl}#stories`}>旅遊日記</a>
+        <a href={`${baseUrl}#stories`}>翻譯雜談</a>
+        <a href={`${baseUrl}about/`} aria-current="page">關於版主</a>
         <a href={`${baseUrl}contact/`}>聯絡方式</a>
       </nav>
     </header>
 
     <section class="about-page-hero">
       <div>
-        <p class="eyebrow">About</p>
         <h1>關於譯黃大帝</h1>
         <p class="about-hero-subtitle">黃宇揚｜Translator • Interpreter • Traveler</p>
-        <p>
-          旅遊 × 翻譯的個人品牌部落格，記錄語言、文化、口筆譯工作與旅行中的觀察。
-        </p>
       </div>
       <img src={`${assetBase}about-profile.png`} alt="黃宇揚口譯活動照片" />
     </section>

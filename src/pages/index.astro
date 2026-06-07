@@ -65,17 +65,20 @@ const stories = realStories;
   description="譯黃大帝，記錄旅行、文化觀察與翻譯口譯工作中的體悟。"
 >
   <main id="top" class="home-shell">
-    <header class="home-header home-header--nav-only">
+    <header class="home-header">
+      <a class="home-brand" href={baseUrl} aria-label="譯黃大帝首頁">
+        <span>Y</span>
+        <strong>譯黃大帝</strong>
+      </a>
       <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="開啟導覽列">
         <span></span>
         <span></span>
         <span></span>
       </button>
       <nav class="home-nav" data-nav aria-label="主導覽">
-        <a href={baseUrl}>首頁</a>
-        <a href={`${baseUrl}#stories`}>旅行日記</a>
-        <a href={`${baseUrl}#categories`}>翻譯雜談</a>
-        <a href={`${baseUrl}about/`}>關於我</a>
+        <a href={`${baseUrl}#stories`}>旅遊日記</a>
+        <a href={`${baseUrl}#stories`}>翻譯雜談</a>
+        <a href={`${baseUrl}about/`}>關於版主</a>
         <a href={`${baseUrl}contact/`}>聯絡方式</a>
       </nav>
     </header>
@@ -90,7 +93,7 @@ const stories = realStories;
         </p>
         <div class="hero-actions">
           <a class="button primary" href="#stories">開始閱讀</a>
-          <a class="button ghost" href={`${baseUrl}about/`}>關於我</a>
+          <a class="button ghost" href={`${baseUrl}about/`}>關於版主</a>
         </div>
       </div>
     </section>
@@ -121,42 +124,6 @@ const stories = realStories;
       <p class="empty-state" data-empty hidden>找不到符合條件的文章。</p>
     </section>
 
-    <section class="home-section about-section about-simple-section" id="about">
-      <div class="about-photo">
-        <img src={`${baseUrl}assets/uploads/about/about-profile.png`} alt="黃宇揚口譯活動照片" />
-      </div>
-      <div class="about-copy">
-        <p class="eyebrow">About</p>
-        <h2>關於譯黃大帝</h2>
-        <p>
-          嗨，我是黃宇揚，一名熱愛翻譯與旅行的譯者
-        </p>
-        <p>
-          我喜歡透過語言理解不同文化，也喜歡親自踏上旅程，用雙眼感受世界
-        </p>
-        <p>
-          想更認識我嗎？歡迎點擊下方「了解更多關於我」
-        </p>
-        <a class="button primary" href={`${baseUrl}about/`}>了解更多關於我</a>
-      </div>
-    </section>
-
-    <section class="home-section categories-section" id="categories">
-      <div class="center-heading">
-        <p class="eyebrow">Topics</p>
-        <h2>熱門分類</h2>
-      </div>
-      <div class="category-card-grid">
-        {categoryCards.map((category) => (
-          <a class="category-card" href="#stories" data-category-filter={category.category}>
-            <img src={`${baseUrl}${category.image.replace(/^\//, "")}`} alt={category.label} />
-            <span class="category-icon">{category.icon}</span>
-            <strong>{category.label}</strong>
-          </a>
-        ))}
-      </div>
-    </section>
-
     <footer class="home-footer">
       <div>
         <a class="footer-brand" href={`${baseUrl}`}>
@@ -167,10 +134,9 @@ const stories = realStories;
       </div>
       <nav>
         <h3>網站導覽</h3>
-        <a href={baseUrl}>首頁</a>
-        <a href={`${baseUrl}#stories`}>旅行日記</a>
-        <a href={`${baseUrl}#categories`}>翻譯雜談</a>
-        <a href={`${baseUrl}about/`}>關於我</a>
+        <a href={`${baseUrl}#stories`}>旅遊日記</a>
+        <a href={`${baseUrl}#stories`}>翻譯雜談</a>
+        <a href={`${baseUrl}about/`}>關於版主</a>
         <a href={`${baseUrl}contact/`}>聯絡方式</a>
       </nav>
       <div>

@@ -2145,6 +2145,8 @@ body:has(.home-shell) {
 .about-page-hero {
   align-items: center;
   grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.55fr);
+  padding-bottom: 58px;
+  padding-top: 58px;
 }
 
 .about-page-hero h1,
