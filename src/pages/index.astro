@@ -65,11 +65,7 @@ const stories = realStories;
   description="譯黃大帝，記錄旅行、文化觀察與翻譯口譯工作中的體悟。"
 >
   <main id="top" class="home-shell">
-    <header class="home-header">
-      <a class="home-brand" href={baseUrl} aria-label="譯黃大帝首頁">
-        <span>Y</span>
-        <strong>譯黃大帝</strong>
-      </a>
+    <header class="home-header home-header--nav-only">
       <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="開啟導覽列">
         <span></span>
         <span></span>
@@ -124,31 +120,6 @@ const stories = realStories;
       <p class="empty-state" data-empty hidden>找不到符合條件的文章。</p>
     </section>
 
-    <footer class="home-footer">
-      <div>
-        <a class="footer-brand" href={`${baseUrl}`}>
-          <span>Y</span>
-          <strong>譯黃大帝</strong>
-        </a>
-        <p>譯遊未盡，持續探索世界，用翻譯連結更多美好。</p>
-      </div>
-      <nav>
-        <h3>網站導覽</h3>
-        <a href={`${baseUrl}#stories`}>旅遊日記</a>
-        <a href={`${baseUrl}#stories`}>翻譯雜談</a>
-        <a href={`${baseUrl}about/`}>關於版主</a>
-        <a href={`${baseUrl}contact/`}>聯絡方式</a>
-      </nav>
-      <div>
-        <h3>聯絡方式</h3>
-        <p>yuyangtranslator@gmail.com</p>
-        <div class="social-links" aria-label="社群連結">
-          <a href="#" aria-label="Instagram">◎</a>
-          <a href="#" aria-label="Facebook">f</a>
-          <a href="mailto:yuyangtranslator@gmail.com" aria-label="Email">✉</a>
-        </div>
-      </div>
-    </footer>
   </main>
 
   <script src={`${baseUrl}astro-main.js`}></script>
