@@ -45,20 +45,6 @@ const educationTimeline = [
   { year: "2024–至今", label: "東吳大學｜翻譯碩士班" },
 ];
 
-const experienceItems = [
-  {
-    title: "法律與司法通譯",
-    text: "曾參與法院、警政與調解程序相關通譯工作",
-  },
-  {
-    title: "口譯經驗",
-    text: "包含法律、商務、醫療、觀光與跨文化情境",
-  },
-  {
-    title: "筆譯經驗",
-    text: "包含字幕、新聞、商務文件與跨文化內容",
-  },
-];
 ---
 
 <BaseLayout
@@ -146,21 +132,6 @@ const experienceItems = [
               <h3>{item.title}</h3>
               <a class="document-link" href={item.image} target="_blank" rel="noopener">查看文件</a>
             </div>
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <section class="about-page-section">
-      <div class="section-heading">
-        <p class="eyebrow">Work</p>
-        <h2>翻譯與口譯經驗</h2>
-      </div>
-      <div class="experience-grid">
-        {experienceItems.map((item) => (
-          <article class="experience-card">
-            <h3>{item.title}</h3>
-            <p>{item.text}</p>
           </article>
         ))}
       </div>

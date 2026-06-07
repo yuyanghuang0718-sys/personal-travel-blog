@@ -2298,8 +2298,7 @@ body:has(.home-shell) {
   margin: 0;
 }
 
-.document-grid,
-.experience-grid {
+.document-grid {
   display: grid;
   gap: 22px;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2319,8 +2318,7 @@ body:has(.home-shell) {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.document-card,
-.experience-card {
+.document-card {
   background: #fff;
   border: 1px solid rgba(92, 73, 58, 0.12);
   border-radius: 14px;
@@ -2362,8 +2360,7 @@ body:has(.home-shell) {
 }
 
 .document-card h3,
-.document-card h4,
-.experience-card h3 {
+.document-card h4 {
   color: #202936;
   font-family: "Noto Serif TC", "Microsoft JhengHei", serif;
   font-size: 1.15rem;
@@ -2384,16 +2381,6 @@ body:has(.home-shell) {
 .document-link:hover {
   background: #975e48;
   color: #fffaf4;
-}
-
-.experience-card {
-  padding: 24px;
-}
-
-.experience-card p {
-  color: #5d6878;
-  line-height: 1.85;
-  margin: 12px 0 0;
 }
 
 .about-cta,
@@ -2503,8 +2490,7 @@ body:has(.home-shell) {
   }
 
   .about-page-hero,
-  .document-grid,
-  .experience-grid {
+  .document-grid {
     grid-template-columns: 1fr;
   }
 
