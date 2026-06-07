@@ -2233,6 +2233,7 @@ body:has(.home-shell) {
 }
 
 .about-intro-section {
+  padding-top: 38px;
   text-align: center;
 }
 
