@@ -2232,6 +2232,29 @@ body:has(.home-shell) {
   margin: 0 0 1.6em;
 }
 
+.about-intro-section {
+  text-align: center;
+}
+
+.about-intro-section .section-heading {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.about-intro-section .about-rich-text {
+  line-height: 2;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 960px;
+  text-align: left;
+  text-wrap: pretty;
+}
+
+.about-intro-section .about-rich-text p {
+  margin-bottom: 1.25rem;
+}
+
 .timeline-list {
   display: grid;
   gap: 0;

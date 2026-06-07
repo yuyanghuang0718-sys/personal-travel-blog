@@ -21,90 +21,6 @@ const categoryCards = [
   { category: "interpreting", label: "口譯日常", icon: "譯", image: "/assets/uploads/20260516_223350.jpg" },
 ];
 
-const placeholderStories = [
-  {
-    category: "russia",
-    categoryLabel: "俄羅斯旅遊",
-    title: "莫斯科紅場散步記",
-    excerpt: "從聖瓦西里主教座堂到紅場石板路，記錄初見莫斯科的震撼與冬日城市光影。",
-    dateIso: "2024-11-15",
-    dateLabel: "2024-11-15",
-    cover: "/assets/blog-cover.png",
-  },
-  {
-    category: "russia",
-    categoryLabel: "俄羅斯旅遊",
-    title: "西伯利亞鐵路初體驗",
-    excerpt: "窗外景色一路延展，火車上的時間感、旅人故事與長途移動的浪漫。",
-    dateIso: "2024-10-28",
-    dateLabel: "2024-10-28",
-    cover: "/assets/uploads/20260516_223926.jpg",
-  },
-  {
-    category: "russia",
-    categoryLabel: "俄羅斯旅遊",
-    title: "葉卡捷琳堡城市印象",
-    excerpt: "歐亞交界上的城市日常，從街角建築、咖啡館到歷史記憶的短篇觀察。",
-    dateIso: "2024-10-08",
-    dateLabel: "2024-10-08",
-    cover: "/assets/uploads/20260516_223930.jpg",
-  },
-  {
-    category: "translation",
-    categoryLabel: "翻譯雜談",
-    title: "翻譯工作的挑戰與樂趣",
-    excerpt: "那些字典查不到的語氣、文化差異與現場判斷，是翻譯最迷人的地方。",
-    dateIso: "2024-09-22",
-    dateLabel: "2024-09-22",
-    cover: "/assets/uploads/20260513_223608.jpg",
-  },
-  {
-    category: "translation",
-    categoryLabel: "翻譯雜談",
-    title: "法律口譯的一天",
-    excerpt: "從事前準備到現場應對，整理法律口譯工作中需要保持清楚與精準的細節。",
-    dateIso: "2024-09-05",
-    dateLabel: "2024-09-05",
-    cover: "/assets/uploads/20260516_223350.jpg",
-  },
-  {
-    category: "translation",
-    categoryLabel: "翻譯雜談",
-    title: "翻譯與文化差異",
-    excerpt: "同一句話在不同語境下可能完全不同，翻譯也是理解文化的過程。",
-    dateIso: "2024-08-18",
-    dateLabel: "2024-08-18",
-    cover: "/assets/uploads/20260514_002020.jpg",
-  },
-  {
-    category: "interpreting",
-    categoryLabel: "口譯日常",
-    title: "第一次法院口譯經驗",
-    excerpt: "第一次站上法庭口譯位置時，如何管理緊張、保持中立並準確傳達。",
-    dateIso: "2024-08-01",
-    dateLabel: "2024-08-01",
-    cover: "/assets/uploads/20260516_223937.jpg",
-  },
-  {
-    category: "interpreting",
-    categoryLabel: "口譯日常",
-    title: "醫療口譯準備流程",
-    excerpt: "醫療場域需要速度也需要同理心，這是一份從詞彙到情境的準備筆記。",
-    dateIso: "2024-07-16",
-    dateLabel: "2024-07-16",
-    cover: "/assets/uploads/20260514_111329.jpg",
-  },
-  {
-    category: "interpreting",
-    categoryLabel: "口譯日常",
-    title: "如何準備同步口譯",
-    excerpt: "主題研究、術語表、聽力暖身與筆記方法，建立上場前的穩定節奏。",
-    dateIso: "2024-06-30",
-    dateLabel: "2024-06-30",
-    cover: "/assets/uploads/20260519_000946.jpg",
-  },
-];
-
 const formatDate = (date: Date) =>
   new Intl.DateTimeFormat("zh-TW", {
     year: "numeric",
@@ -140,13 +56,7 @@ const realStories = (await getCollection("posts"))
     };
   });
 
-const realCategorySet = new Set(realStories.map((story) => story.category));
-const stories = [
-  ...realStories,
-  ...placeholderStories
-    .filter((story) => !realCategorySet.has(story.category))
-    .map((story) => ({ ...story, href: "#coming-soon", placeholder: true })),
-];
+const stories = realStories;
 
 ---
 
@@ -265,11 +175,11 @@ const stories = [
       </nav>
       <div>
         <h3>聯絡方式</h3>
-        <p>hello@yuyangtranslator.com</p>
+        <p>yuyangtranslator@gmail.com</p>
         <div class="social-links" aria-label="社群連結">
           <a href="#" aria-label="Instagram">◎</a>
           <a href="#" aria-label="Facebook">f</a>
-          <a href="mailto:hello@yuyangtranslator.com" aria-label="Email">✉</a>
+          <a href="mailto:yuyangtranslator@gmail.com" aria-label="Email">✉</a>
         </div>
       </div>
     </footer>
