@@ -2199,6 +2199,7 @@ body:has(.home-shell) {
   height: auto;
   object-fit: cover;
   object-position: center top;
+  transform: translateX(-80px);
   width: 100%;
 }
 
@@ -2510,6 +2511,7 @@ body:has(.home-shell) {
   .about-photo img {
     max-height: 520px;
     object-position: center top;
+    transform: none;
   }
 
   .home-footer {
